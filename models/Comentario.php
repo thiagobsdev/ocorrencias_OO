@@ -1,8 +1,8 @@
 <?php
 namespace src\models;
-use \core\Model;
 
-class Comentario extends Model {
+
+class Comentario  {
 
     public $id;
     public $texto;

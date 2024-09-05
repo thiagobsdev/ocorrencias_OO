@@ -1,6 +1,5 @@
 <?php
 
-use src\models\envolvidoDAO;
 use src\models\Ocorrencia;
 
 require 'config.php';
@@ -9,6 +8,7 @@ require 'models/Ocorrencia.php';
 require_once 'dao/OcorrenciaDAOMySql.php';
 require_once 'dao/EnvolvidoDAOMySql.php';
 require_once 'dao/AtivoDAOMySql.php';
+require_once 'dao/FotoDAOMySql.php';
 
 $auth = new Auth($pdo, $base);
 
@@ -70,6 +70,11 @@ if (
     if ($id_ocorrencia > 0 && !empty($ativos)) {
         $ativosDAO = new AtivoDAOMySql($pdo);
         $ativosDAO->cadastrarAtivos($ativos, $id_ocorrencia);
+    }
+
+    if ($id_ocorrencia > 0 && !empty($arquivosFotos)) {
+        $fotosDAO = new FotoDAOMySql($pdo);
+        $fotosDAO->salvarFotos($arquivosFotos,$data_ocorrencia, $id_ocorrencia,$id_usuario );
     }
 
 

@@ -1,6 +1,6 @@
 <?php
 
-
+require_once 'models/Ocorrencia.php';
 
 use src\models\Ocorrencia;
 use src\models\OcorrenciaDAO;

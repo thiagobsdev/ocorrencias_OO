@@ -1,8 +1,8 @@
 <?php
 namespace src\models;
-use \core\Model;
 
-class Foto extends Model {
+
+class Foto  {
 
     public $id;
     public $nome;
@@ -10,4 +10,8 @@ class Foto extends Model {
     public $id_ocorrencia;
     public $id_usuario;
 
+}
+
+interface FotoDAO {
+    public function salvarFotos($arquivos, $data_ocorrencia, $id_ocorrencia, $id_usuario);
 }
