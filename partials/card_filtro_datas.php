@@ -8,7 +8,7 @@
             <h5 class="mb-0">Filtros de Pesquisa</h5>
         </div>
         <div class="card-body">
-            <form id="filter-form" method="GET" action="<?= $base; ?>/pesquisa_datas">
+            <form id="filter-form" method="GET" action="<?= $base; ?>pesquisa_datas">
                 <div class="row mb-3 d-flex justify-content-center align-content-center">
                     <div class="col-md-4">
                         <label for="data" class="form-label">Data inicio</label>

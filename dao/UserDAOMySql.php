@@ -87,4 +87,39 @@ class UserDAOMySql implements UserDAO
             return true;
         }
     }
+
+    public function cadastrarUsuario(Usuario $user)
+    {
+        if (!empty($user)) {
+
+            $emailExistente = $this->findByEmail($user->email);
+
+            if (empty($emailExistente)) {
+
+                $hash = password_hash($user->senha, PASSWORD_DEFAULT);
+                $sql = $this->pdo->prepare("INSERT INTO usuarios
+                 (nome,email, senha, nivel,status ) 
+                 VALUES (:nome, :email, :senha, :nivel, :status)");
+                $sql->bindValue(':nome', $user->nome);
+                $sql->bindValue(':email', $user->email);
+                $sql->bindValue(':senha', $hash);
+                $sql->bindValue(':nivel', $user->nivel);
+                $sql->bindValue(':status', $user->status);
+                $sql->execute();
+
+                $ultimoId = $this->pdo->lastInsertId();
+                $sql = $this->pdo->prepare("SELECT * FROM usuarios WHERE id = :id");
+                $sql->bindValue(':id', $ultimoId);
+                $sql->execute();
+                
+                if ($sql->rowCount() > 0) {
+                    $data = $sql->fetch(PDO::FETCH_ASSOC);
+                    $user = $this->generateUser($data);
+                    return $user;
+                }
+            }
+        }
+
+        return false;
+    }
 }

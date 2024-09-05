@@ -1,8 +1,8 @@
 <?php
 namespace src\models;
-use \core\Model;
 
-class Envolvido extends Model {
+
+class Envolvido  {
 
     public $id;
     public $nome;
@@ -14,7 +14,10 @@ class Envolvido extends Model {
     public $placa;
     public $id_ocorrencia;
 
-
-
+}
+interface envolvidoDAO
+{
+     public function cadastrarEnvolvidos($envolvidos, $id_ocorrencia);
 
 }
+

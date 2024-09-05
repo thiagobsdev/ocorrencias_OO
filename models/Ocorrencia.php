@@ -1,8 +1,8 @@
 <?php
 namespace src\models;
-use \core\Model;
 
-class Ocorrencia extends Model {
+
+class Ocorrencia  {
 
      public $id;
      public $equipe;
@@ -17,15 +17,16 @@ class Ocorrencia extends Model {
      public $natureza;
      public $descricao;
      public $acoes;
-     public $usuario;
+     public $id_usuario;
      public $envolvidosLista;
      public $ativosLista;
      public $fotosOcorrencias;
      public $comentarios;
-     
 
+}
 
-     
-
+interface OcorrenciaDAO
+{
+     public function cadastrarNovaOcorrencia(Ocorrencia $novaOcorrencia);
 
 }
