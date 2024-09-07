@@ -19,7 +19,7 @@ class AtivoDAOMySql implements ativoDAO
 
     public function arrayAtivoParaObjetoAtivo($array)
     {
-       
+
         $novoAtivo = new Ativo();
         $novoAtivo->id = $array['id'] ?? 0;
         $novoAtivo->tipo_ativo = $array['tipo_ativo'] ?? "";
@@ -53,5 +53,19 @@ class AtivoDAOMySql implements ativoDAO
             return true;
         }
         return false;
+    }
+
+    public function excluirAtivosByOcorrencia($id_ocorrencia)
+    {
+        if (isset($id_ocorrencia) && $id_ocorrencia > 0) {
+            $sql = $this->pdo->prepare("DELETE FROM ativos WHERE id_ocorrencia = :id_ocorrencia ;");
+            $sql->bindValue(':id_ocorrencia', $id_ocorrencia);
+
+            if ($sql->execute()) {
+                return $sql->rowCount();
+            } else {
+                return false;
+            }
+        }
     }
 }

@@ -179,7 +179,7 @@
                 let data = new FormData();
                 data.append('id', occurrenceId);
 
-                let req = await fetch(BASE + '/excluir', {
+                let req = await fetch(BASE + '/excluir.php', {
                     method: 'POST',
                     body: data
                 })

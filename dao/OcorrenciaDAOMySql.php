@@ -2,6 +2,10 @@
 
 require_once 'models/Ocorrencia.php';
 require_once 'dao/UserDAOMySql.php';
+require_once 'dao/AtivoDAOMySql.php';
+require_once 'dao/EnvolvidoDAOMySql.php';
+require_once 'dao/FotoDAOMySql.php';
+
 
 
 use src\models\Ocorrencia;
@@ -172,5 +176,36 @@ class OcorrenciaDAOMySql implements OcorrenciaDAO
             ];
         }
         return false;
+    }
+
+    public function excluirOcorrencia($id)
+    {
+        $ocorrenciaDeletada = "";
+        if ($id) {
+
+            $sql = $this->pdo->prepare("DELETE FROM ocorrencias WHERE id = :id ;");
+            $sql->bindValue(':id', $id);
+
+            if ($sql->execute()) {
+                $ocorrenciaDeletada =  $sql->rowCount();
+            } else {
+                return false;
+            }
+        }
+        if ($ocorrenciaDeletada > 0) {
+            $ativoDAO = new AtivoDAOMySql($this->pdo);
+            $ativoDAO->excluirAtivosByOcorrencia($id);
+        }
+
+        if ($ocorrenciaDeletada > 0) {
+            $envolvidosDAO = new EnvolvidoDAOMySql($this->pdo);
+            $envolvidosDAO->excluirEnvolvidosByOcorrencia($id);
+        }
+
+        if ($ocorrenciaDeletada > 0) {
+            $fotosDAO = new FotoDAOMySql($this->pdo);
+            $fotosDAO->excluirFotosByOcorrencia($id);
+        }
+
     }
 }
