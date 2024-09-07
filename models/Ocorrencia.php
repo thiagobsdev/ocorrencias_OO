@@ -17,7 +17,7 @@ class Ocorrencia  {
      public $natureza;
      public $descricao;
      public $acoes;
-     public $id_usuario;
+     public $usuario;
      public $envolvidosLista;
      public $ativosLista;
      public $fotosOcorrencias;
@@ -28,5 +28,6 @@ class Ocorrencia  {
 interface OcorrenciaDAO
 {
      public function cadastrarNovaOcorrencia(Ocorrencia $novaOcorrencia);
+     public function listarTodasOcorrencias();
 
 }

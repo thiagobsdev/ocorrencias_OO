@@ -17,6 +17,20 @@ class AtivoDAOMySql implements ativoDAO
         $this->pdo = $pdo;
     }
 
+    public function arrayAtivoParaObjetoAtivo($array)
+    {
+       
+        $novoAtivo = new Ativo();
+        $novoAtivo->id = $array['id'] ?? 0;
+        $novoAtivo->tipo_ativo = $array['tipo_ativo'] ?? "";
+        $novoAtivo->id_ativo = $array['id_ativo'] ?? "";
+        $novoAtivo->id_ocorrencia = $array['id_ocorrencia'] ?? "";
+
+        // print_r($novoAtivo);
+        // exit;
+        return $novoAtivo;
+    }
+
     public function cadastrarAtivos($ativos, $id_ocorrencia)
     {
 

@@ -15,7 +15,7 @@ class UserDAOMySql implements UserDAO
         $this->pdo = $pdo;
     }
 
-    private function generateUser($array)
+    public function generateUser($array)
     {
         $novoUsuario = new Usuario();
         $novoUsuario->id = $array['id'] ?? 0;

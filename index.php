@@ -2,10 +2,16 @@
 
 require 'config.php';
 require 'models/Auth.php';
+require 'models/Ocorrencia.php';
+
+require_once 'dao/OcorrenciaDAOMySql.php';
 
 $auth = new Auth($pdo, $base);
+$getOcorrencias = new OcorrenciaDAOMySql($pdo);
 
 $userInfo = $auth->checkToken();
+$ocorrencias = $getOcorrencias->listarTodasOcorrencias();
+
 
 require 'partials/header.php';
 ?>
@@ -22,17 +28,14 @@ require 'partials/header.php';
                 class="flash"><?php echo $flash; ?></div>
         <?php endif; ?>
         <!-- Toggle para o Card de Filtros -->
-        <?php  require 'partials/card_filtro_datas.php'; ?>
+        <?php require 'partials/card_filtro_datas.php'; ?>
 
         <div class="row">
             <div class="col">
-                <?php foreach ($ocorrencias['ocorrencias'] as $ocorrencia): ?>
+                <?php foreach ($ocorrencias as $ocorrencia): ?>
 
                     <!-- Card Ocorrências -->
-                    <?= $render('card_ocorrencia', [
-                        'dados' => $ocorrencia,
-                        'usuarioLogado' => $usuariologado
-                    ]) ?>
+                    <?php require 'partials/card_ocorrencia.php' ?>
 
 
                 <?php endforeach; ?>
@@ -40,15 +43,15 @@ require 'partials/header.php';
 
         </div>
 
-    
-        <!-- Paginação -->
+
+        Paginação
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <!-- Link para a página anterior -->
                 <li class="page-item <?php if ($ocorrencias['paginaAtual']  <= 1) {
                                             echo 'disabled';
                                         } ?>">
-                    <a class="page-link" href="<?= $base; ?>/?page=<?php $ocorrencias['paginaAtual'] - 1; ?>">Anterior</a>
+                    <a class="page-link" href="<?= $base; ?>/?page=<?php //$ocorrencias['paginaAtual'] - 1; ?>">Anterior</a>
                 </li>
 
                 <!-- Links para as páginas dentro do intervalo definido -->
@@ -64,7 +67,7 @@ require 'partials/header.php';
                 <li class="page-item <?php if ($ocorrencias['paginaAtual'] >= $ocorrencias['totalDePaginas']) {
                                             echo 'disabled';
                                         } ?>">
-                    <a class="page-link" href="<?= $base; ?>/?page=<?php echo $ocorrencias['paginaAtual'] + 1; ?>">Próximo</a>
+                    <a class="page-link" href="<?= $base; ?>/?page=<?php //echo $ocorrencias['paginaAtual'] + 1; ?>">Próximo</a>
                 </li>
             </ul>
         </nav>

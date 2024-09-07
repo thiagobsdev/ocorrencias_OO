@@ -58,7 +58,7 @@ if (
     $novaOcorrencia->natureza = $natureza;
     $novaOcorrencia->descricao = $descricao;
     $novaOcorrencia->acoes = $acoes;
-    $novaOcorrencia->id_usuario = $id_usuario;
+    $novaOcorrencia->usuario = $id_usuario;
 
     $id_ocorrencia =  $ocorrenciaDAO->cadastrarNovaOcorrencia($novaOcorrencia);
 
@@ -74,8 +74,9 @@ if (
 
     if ($id_ocorrencia > 0 && !empty($arquivosFotos)) {
         $fotosDAO = new FotoDAOMySql($pdo);
-        $fotosDAO->salvarFotos($arquivosFotos,$data_ocorrencia, $id_ocorrencia,$id_usuario );
+        $fotosDAO->salvarFotos($arquivosFotos, $data_ocorrencia, $id_ocorrencia, $id_usuario);
     }
 
-
+    header("Location: " . $base . "index.php");
+    exit;
 }

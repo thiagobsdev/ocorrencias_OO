@@ -1,33 +1,33 @@
 <div class="card mb-4 mb-3">
     <div class="card-header d-flex justify-content-between align-items-center">
         <div>
-            <strong>ID:</strong><?= " " . $dados->id . " "; ?>| <strong>Data:</strong> <?= " " . DateTime::createFromFormat('Y-m-d', $dados->data_ocorrencia)->format('d/m/Y') . " "; ?> | <strong>Hora:</strong> <?= " " . $dados->hora_ocorrencia . " "; ?>
-            <strong>Registrado por:</strong> <?= " " . $dados->usuario->nome . " "; ?>
+            <strong>ID:</strong><?= " " . $ocorrencia->id . " "; ?>| <strong>Data:</strong> <?= " " . DateTime::createFromFormat('Y-m-d', $ocorrencia->data_ocorrencia)->format('d/m/Y') . " "; ?> | <strong>Hora:</strong> <?= " " . $ocorrencia->hora_ocorrencia . " "; ?>
+            <strong>Registrado por:</strong> <?= " " . $ocorrencia->usuario->nome . " "; ?>
         </div>
         <div>
-            <?php if ($usuarioLogado['nivel'] === "Administrador") :  ?>
+            <?php if ($userInfo->nivel === "Administrador") :  ?>
 
-                <button data-id="<?= $dados->id; ?>" href="<?= $base; ?>/excluir/<?= $dados->id; ?>" class="btn-excluir btn btn-danger">Excluir</button>
-                <button style="margin-left: 10px; margin-right: 10px" class="btn btn-warning" onclick="window.location.href='<?= $base; ?>/editar/<?= $dados->id; ?>'">Editar</button>
+                <button data-id="<?= $ocorrencia->id; ?>" href="<?= $base; ?>/excluir/<?= $ocorrencia->id; ?>" class="btn-excluir btn btn-danger">Excluir</button>
+                <button style="margin-left: 10px; margin-right: 10px" class="btn btn-warning" onclick="window.location.href='<?= $base; ?>/editar/<?= $ocorrencia->id; ?>'">Editar</button>
 
             <?php endif; ?>
-            <button class="btn btn-secondary print-btn" onclick="window.location.href='<?= $base; ?>/imprimir/<?= $dados->id; ?>'">Imprimir PDF</button>
+            <button class="btn btn-secondary print-btn" onclick="window.location.href='<?= $base; ?>/imprimir/<?= $ocorrencia->id; ?>'">Imprimir PDF</button>
         </div>
     </div>
     <div class="card-body ocorrencia-content" id="ocorrencia-001">
-        <h5 class="card-title" style="text-align:center"><?= " " . $dados->titulo . " "; ?></h5>
+        <h5 class="card-title" style="text-align:center"><?= " " . $ocorrencia->titulo . " "; ?></h5>
         <p class="card-text">
-            <strong>Área:</strong> <?= " " . $dados->area . " "; ?><br>
-            <strong>Local:</strong> <?= " " . $dados->local . " "; ?><br>
-            <strong>Tipo:</strong> <?= " " . $dados->tipo_natureza . " "; ?><br>
-            <strong>Natureza:</strong> <?= " " . $dados->natureza . " "; ?>
+            <strong>Área:</strong> <?= " " . $ocorrencia->area . " "; ?><br>
+            <strong>Local:</strong> <?= " " . $ocorrencia->local . " "; ?><br>
+            <strong>Tipo:</strong> <?= " " . $ocorrencia->tipo_natureza . " "; ?><br>
+            <strong>Natureza:</strong> <?= " " . $ocorrencia->natureza . " "; ?>
         </p>
 
         <!-- Informações do Ativo -->
 
         <h6>Ativos:</h6>
 
-        <?php if (!empty($dados->ativosLista)) : ?>
+        <?php if (!empty($ocorrencia->ativosLista)) : ?>
             <table class="table table-dark table-striped ">
                 <thead>
                     <tr>
@@ -37,12 +37,13 @@
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($dados->ativosLista as $ativo): ?>
+                    foreach ($ocorrencia->ativosLista as $ativo): ?>
                         <tr>
-                            <td><?= $ativo->tipo_ativo; ?></td>
-                            <td><?= $ativo->id_ativo; ?></td>
+                            <td><?= $ativo['tipo_ativo']; ?></td>
+                            <td><?= $ativo['id_ativo']; ?></td>
                         </tr>
                     <?php endforeach; ?>
+
                 </tbody>
             </table>
         <?php else : ?>
@@ -52,7 +53,7 @@
         <!-- Se houver envolvidos -->
         <h6>Envolvidos:</h6>
 
-        <?php if (!empty($dados->envolvidosLista)) : ?>
+        <?php if (!empty($ocorrencia->envolvidosLista)) : ?>
             <table class="table table-primary table-striped ">
                 <thead>
                     <tr>
@@ -66,15 +67,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($dados->envolvidosLista as $envolvido): ?>
+                    <?php foreach ($ocorrencia->envolvidosLista as $envolvido): ?>
                         <tr>
-                            <td><?= $envolvido->nome; ?></td>
-                            <td><?= $envolvido->tipo_de_documento; ?></td>
-                            <td><?= $envolvido->numero_documento; ?></td>
-                            <td><?= $envolvido->envolvimento; ?></td>
-                            <td><?= $envolvido->vinculo; ?></td>
-                            <td><?= $envolvido->tipo_veiculo; ?></td>
-                            <td><?= $envolvido->placa; ?></td>
+                            <td><?= $envolvido['nome']; ?></td>
+                            <td><?= $envolvido['tipo_de_documento']; ?></td>
+                            <td><?= $envolvido['numero_documento']; ?></td>
+                            <td><?= $envolvido['envolvimento']; ?></td>
+                            <td><?= $envolvido['vinculo']; ?></td>
+                            <td><?= $envolvido['tipo_veiculo']; ?></td>
+                            <td><?= $envolvido['placa']; ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -85,28 +86,28 @@
 
         <!-- Descrição da Ocorrência -->
         <h6>Descrição da ocorrência:</h6>
-        <p class="card-text"><?= nl2br($dados->descricao) . " "; ?>.</p>
+        <p class="card-text"><?= nl2br($ocorrencia->descricao) . " "; ?>.</p>
 
         <!-- Ações Tomadas -->
         <h6 class="">Ações Tomadas:</h6>
-        <p class="card-text"><?= nl2br($dados->acoes) . " "; ?>.</p>
+        <p class="card-text"><?= nl2br($ocorrencia->acoes) . " "; ?>.</p>
 
         <!-- Fotos -->
         <h6>Fotos:</h6>
-        <?php if (!empty($dados->fotosOcorrencias)) : ?>
-            <div id="<?= $dados->id; ?>" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <?php if (!empty($ocorrencia->fotosOcorrencias)) : ?>
+            <div id="<?= $ocorrencia->id; ?>" class="carousel slide carousel-fade" data-bs-ride="carousel">
                 <div class="carousel-inner">
-                    <?php foreach ($dados->fotosOcorrencias as $foto): ?>
+                    <?php foreach ($ocorrencia->fotosOcorrencias as $foto): ?>
                         <div class="carousel-item active d-flex justify-content-center" style="background-color: rgb(202,198,202);">
-                            <img src="<?= $base; ?>/<?= $foto->url; ?>" class="d-block " alt="<?= $foto->nome; ?>" style="max-height: 500px" >
+                            <img src="<?= $base; ?>/<?= $foto['url']; ?>" class="d-block " alt="<?= $foto['nome']; ?>" style="max-height: 500px">
                         </div>
                     <?php endforeach;; ?>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#<?= $dados->id; ?>" data-bs-slide="prev">
+                <button class="carousel-control-prev" type="button" data-bs-target="#<?= $ocorrencia->id; ?>" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#<?= $dados->id; ?>" data-bs-slide="next">
+                <button class="carousel-control-next" type="button" data-bs-target="#<?= $ocorrencia->id; ?>" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
@@ -168,7 +169,7 @@
             button.addEventListener('click', function() {
                 occurrenceId = this.getAttribute('data-id'); // Captura o ID da ocorrência
                 $('#confirmDeleteModal').modal('show'); // Exibe o modal de confirmação
-            
+
             });
         });
 
