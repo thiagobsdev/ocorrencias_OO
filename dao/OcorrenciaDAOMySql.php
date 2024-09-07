@@ -86,9 +86,30 @@ class OcorrenciaDAOMySql implements OcorrenciaDAO
     public function listarTodasOcorrencias()
     {
         $listaOcorrencias = [];
+        $porPagina = 2;
+        $paginaSolicitada = intval(filter_input(INPUT_GET, "p"));
 
-        $sql = $this->pdo->prepare("SELECT * FROM ocorrencias ORDER BY data_ocorrencia DESC, hora_ocorrencia DESC;");
+        if ($paginaSolicitada < 1) {
+            $paginaSolicitada = 1;
+        }
+
+        $offset = ($paginaSolicitada - 1) * $porPagina;
+
+        $sql = $this->pdo->query("SELECT COUNT(*) AS c FROM ocorrencias");
+        $totalDeLinhas = $sql->fetch();
+        $totalDeOcorrencias =   $totalDeLinhas['c'];
+
+        $contagemPaginas = ceil($totalDeOcorrencias / $porPagina);
+        $paginaInicial = (ceil($paginaSolicitada / $porPagina) * -1) * $porPagina + 1;
+        $paginaFinal = min($paginaSolicitada + $porPagina - 1, $contagemPaginas);
+
+        $sql = $this->pdo->prepare("SELECT * FROM ocorrencias
+                         ORDER BY data_ocorrencia DESC, 
+                         hora_ocorrencia DESC
+                         LIMIT $offset, $porPagina");
         $sql->execute();
+
+
 
         if ($sql->rowCount() > 0) {
             $ocorrenciaListaArray = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -138,7 +159,17 @@ class OcorrenciaDAOMySql implements OcorrenciaDAO
 
                 $listaOcorrencias[] = $novaOcorrencia;
             }
-            return $listaOcorrencias;
+
+
+            return [
+                'ocorrencias' => $listaOcorrencias,
+                'porPagina' => $contagemPaginas,
+                'paginaAtual' => $paginaSolicitada,
+                'paginaInicial' => $paginaInicial,
+                'paginaFinal' => $paginaFinal,
+                'totalDePaginas' => $contagemPaginas
+
+            ];
         }
         return false;
     }

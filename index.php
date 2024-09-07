@@ -10,8 +10,16 @@ $auth = new Auth($pdo, $base);
 $getOcorrencias = new OcorrenciaDAOMySql($pdo);
 
 $userInfo = $auth->checkToken();
-$ocorrencias = $getOcorrencias->listarTodasOcorrencias();
+$ocorrenciasArray = $getOcorrencias->listarTodasOcorrencias();
 
+$p = $ocorrenciasArray['paginaAtual'];
+
+// print_r($p);
+// exit;
+
+
+
+$ocorrencias = $ocorrenciasArray['ocorrencias'];
 
 require 'partials/header.php';
 ?>
@@ -43,31 +51,29 @@ require 'partials/header.php';
 
         </div>
 
-
-        Paginação
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <!-- Link para a página anterior -->
-                <li class="page-item <?php if ($ocorrencias['paginaAtual']  <= 1) {
+                <li class="page-item <?php if ($ocorrenciasArray['paginaAtual']  <= 1) {
                                             echo 'disabled';
                                         } ?>">
-                    <a class="page-link" href="<?= $base; ?>/?page=<?php //$ocorrencias['paginaAtual'] - 1; ?>">Anterior</a>
+                    <a class="page-link" href="<?= $base;?>?p=<?php $ocorrenciasArray['paginaAtual'] - 1; ?>">Anterior</a>
                 </li>
 
                 <!-- Links para as páginas dentro do intervalo definido -->
-                <?php for ($i = 0; $i < $ocorrencias['totalDePaginas']; $i++): ?>
-                    <li class="page-item <?php if ($i == $ocorrencias['paginaAtual']) {
+                <?php for ($i = 0; $i < $ocorrenciasArray['totalDePaginas']; $i++): ?>
+                    <li class="page-item <?php if ($i == $ocorrenciasArray['paginaAtual']-1) {
                                                 echo 'active';
                                             } ?>">
-                        <a class="page-link" href="<?= $base; ?>/?page=<?= $i; ?>"><?php echo $i + 1; ?></a>
+                        <a class="page-link" href="<?= $base; ?>?p=<?= $i+1; ?>"><?php echo $i + 1; ?></a>
                     </li>
                 <?php endfor; ?>
 
                 <!-- Link para a próxima página -->
-                <li class="page-item <?php if ($ocorrencias['paginaAtual'] >= $ocorrencias['totalDePaginas']) {
+                <li class="page-item <?php if ($ocorrenciasArray['paginaAtual'] >= $ocorrenciasArray['totalDePaginas']) {
                                             echo 'disabled';
                                         } ?>">
-                    <a class="page-link" href="<?= $base; ?>/?page=<?php //echo $ocorrencias['paginaAtual'] + 1; ?>">Próximo</a>
+                    <a class="page-link" href="<?= $base; ?>?p=<?php echo $ocorrenciasArray['paginaAtual'] + 1; ?>">Próximo</a>
                 </li>
             </ul>
         </nav>

@@ -1,7 +1,7 @@
 <div class="card mb-4 mb-3">
     <div class="card-header d-flex justify-content-between align-items-center">
         <div>
-            <strong>ID:</strong><?= " " . $ocorrencia->id . " "; ?>| <strong>Data:</strong> <?= " " . DateTime::createFromFormat('Y-m-d', $ocorrencia->data_ocorrencia)->format('d/m/Y') . " "; ?> | <strong>Hora:</strong> <?= " " . $ocorrencia->hora_ocorrencia . " "; ?>
+            <strong>ID:</strong><?= " " . $ocorrencia->id. " "; ?>| <strong>Data:</strong> <?= " " . DateTime::createFromFormat('Y-m-d', $ocorrencia->data_ocorrencia)->format('d/m/Y') . " "; ?> | <strong>Hora:</strong> <?= " " . $ocorrencia->hora_ocorrencia . " "; ?>
             <strong>Registrado por:</strong> <?= " " . $ocorrencia->usuario->nome . " "; ?>
         </div>
         <div>
