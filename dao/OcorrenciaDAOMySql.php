@@ -87,6 +87,67 @@ class OcorrenciaDAOMySql implements OcorrenciaDAO
         return false;
     }
 
+    public function atualizaOcorrenciaById(
+        $id_ocorrencia,
+        $equipe,
+        $forma_conhecimento,
+        $data_ocorrencia,
+        $hora_ocorrencia,
+        $titulo,
+        $area,
+        $local,
+        $tipo_natureza,
+        $natureza,
+        $descricao,
+        $acoes,
+        $id_usuario
+    ) {
+
+        if (!empty($id_ocorrencia)) {
+            $sql = $this->pdo->prepare("UPDATE ocorrencias 
+                                        SET
+                                        equipe=:equipe,
+                                        forma_conhecimento=:forma_conhecimento,
+                                        data_ocorrencia=:data_ocorrencia,
+                                        hora_ocorrencia=:hora_ocorrencia,
+                                        titulo=:titulo,
+                                        area=:area,
+                                        local=:local,
+                                        tipo_natureza=:tipo_natureza,
+                                        natureza=:natureza,
+                                        descricao=:descricao,
+                                        acoes=:acoes,
+                                        id_usuario=:id_usuario
+                                        WHERE
+                                        id=$id_ocorrencia");
+
+            $sql->bindValue(':equipe', $equipe);
+            $sql->bindValue(':forma_conhecimento', $forma_conhecimento);
+            $sql->bindValue(':data_ocorrencia', $data_ocorrencia);
+            $sql->bindValue(':hora_ocorrencia', $hora_ocorrencia);
+            $sql->bindValue(':titulo', $titulo);
+            $sql->bindValue(':area', $area);
+            $sql->bindValue(':local', $local);
+            $sql->bindValue(':tipo_natureza', $tipo_natureza);
+            $sql->bindValue(':natureza', $natureza);
+            $sql->bindValue(':descricao', $descricao);
+            $sql->bindValue(':acoes', $acoes);
+            $sql->bindValue(':id_usuario', $id_usuario);
+            $result = $sql->execute();
+            if ($result) {
+                // Verificar se alguma linha foi realmente atualizada
+                if ($result > 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                echo "Erro ao executar a atualização.";
+                return false;
+            }
+        }
+    }
+
     public function listarTodasOcorrencias()
     {
         $listaOcorrencias = [];

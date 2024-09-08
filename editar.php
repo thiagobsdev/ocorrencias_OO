@@ -21,17 +21,17 @@ require 'partials/header.php';
         <h1 class="" style="text-align:center;margin-bottom: 40px;padding-top:10px">Edição da Ocorrência Numero: <?= $ocorrencia->id; ?></h1>
 
         <input type="hidden" name="idOcorrencia" value="<?= $ocorrencia->id; ?>">
-        <form class="row g-3" class="formOcorrencia" enctype="multipart/form-data" method="POST" id="formEdit" action="<?= $base; ?>/editar/<?= $ocorrencia->id; ?>">
+        <form class="row g-3" class="formOcorrencia" enctype="multipart/form-data" method="POST" id="formEdit" action="<?= $base; ?>editar_action.php?ocorrencia_id=<?= $ocorrencia->id?>">
             <div class="col-md-6">
                 <label for="validationServer04" class="form-label">Equipe Operacional</label>
                 <select class="form-select" aria-label="Default select example" name="equipe" id="equipe">
                     <option selected><?= $ocorrencia->equipe; ?></option>
-                    <option value="Apoio ao Motorista">Dragão
-                    <option value="Armazém da Receita Federal">Falcão</option>
-                    <option value="Armazém Geral 1">Leão</option>
-                    <option value="Armazém Geral 2">Tubarão</option>
-                    <option value="Armazém Geral 3">Crossdocking</option>
-                    <option value="Bolsão">DEPOT</option>
+                    <option value="Dragão">Dragão
+                    <option value="Falcão">Falcão</option>
+                    <option value="Leão">Leão</option>
+                    <option value="Tubarão">Tubarão</option>
+                    <option value="Crossdocking">Crossdocking</option>
+                    <option value="DEPOT">DEPOT</option>
                 </select>
             </div>
             <div class="col-md-6">
@@ -312,7 +312,7 @@ require 'partials/header.php';
                 <!-- Carrossel de fotos (escondido por padrão) -->
                 <?php
                 // Verifica se $ocorrencia->fotos está vazio
-                $temFotos = !empty($ocorrencia->fotosOcorrencias);
+                $temFotos = (!empty($ocorrencia->fotosOcorrencias)) ? true : false;
                 ?>
                 <div id="fotoCarrosselContainer" class="mt-4">
                     <h3>Visualizar Fotos</h3>
@@ -321,7 +321,7 @@ require 'partials/header.php';
                         <div class="carousel-inner" id="carrosselFotos">
                             <?php foreach ($ocorrencia->fotosOcorrencias as $foto): ?>
                                 <div class="carousel-item active d-flex justify-content-center" style="background-color: rgb(202,198,202);flex-direction:column">
-                                    <img src="<?= $base; ?>/<?= $foto->url; ?>" class="d-block " alt="<?= $foto->nome; ?>" style="max-height: 500px; object-fit: cover;">
+                                    <img src="<?= $base; ?><?= $foto->url; ?>" class="d-block " alt="<?= $foto->nome; ?>" style="max-height: 500px; object-fit: cover;">
                                     <div class="delete-btn-container" style="text-align:center; margin-top: 10px;">
                                         <button data-id="<?= $foto->id; ?>" type="button" class="btn btn-danger btn-excluirFoto">Excluir</button>
                                     </div>
@@ -741,10 +741,6 @@ require 'partials/header.php';
 </script>
 
 
-
-
-
-
 <!-- Modal de exclusao de envolvido -->
 <div class="modal fade" id="confirmDeleteEnvolvidoModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -1019,10 +1015,9 @@ require 'partials/header.php';
         function verificarFotos() {
             if (fotoInput.files.length > 0) {
                 fotosDiv.style.display = 'block';
-            } else if (<?= $temFotos ? 'false' : 'true'; ?>) {
+            } else if (<?= $temFotos ? false : true; ?>) {
                 fotosDiv.style.display = 'none';
             }
-            console.log($temFotos);
         }
 
         // Verifica no carregamento da página
@@ -1036,7 +1031,6 @@ require 'partials/header.php';
     function previewFotos() {
         const fotos = document.getElementById('fotoInput').files;
         const carrosselFotos = document.getElementById('carrosselFotos');
-
 
         if (fotos.length > 0 || <?= count($ocorrencia->fotosOcorrencias) > 0 ?>) {
             document.getElementById('fotoCarrosselContainer').style.display = 'block';

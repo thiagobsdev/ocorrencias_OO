@@ -51,6 +51,28 @@ class AtivoDAOMySql implements ativoDAO
         }
         return false;
     }
+    public function atualizarAtivos($ativosLista, $id_ocorrencia)
+    {
+
+        if (!empty($ativosLista)) {
+            foreach ($ativosLista as $ativo) {
+                if (!isset($ativo['id'])) {
+                    $sql = $this->pdo->prepare("INSERT INTO ativos
+                        (tipo_ativo,
+                        id_ativo, 
+                        id_ocorrencia) 
+                        VALUES (:tipo_ativo, 
+                        :id_ativo, 
+                        :id_ocorrencia)");
+                    $sql->bindValue(':tipo_ativo', $ativo['tipoAtivo']);
+                    $sql->bindValue(':id_ativo', $ativo['idAtivo']);
+                    $sql->bindValue(':id_ocorrencia', $id_ocorrencia);
+
+                    $sql->execute();
+                }
+            }
+        }
+    }
 
     public function excluirAtivosByOcorrencia($id_ocorrencia)
     {
@@ -68,13 +90,12 @@ class AtivoDAOMySql implements ativoDAO
 
     public function excluirAtivoById($id)
     {
-        
+
         if ($id) {
 
             $sql = $this->pdo->prepare("DELETE FROM ativos WHERE id = :id;");
             $sql->bindValue(':id', $id);
             $sql->execute();
         }
-        
     }
 }

@@ -38,6 +38,7 @@ class EnvolvidoDAOMySql implements envolvidoDAO
 
         if (!empty($envolvidos)) {
             foreach ($envolvidos as $envolvido) {
+
                 $sql = $this->pdo->prepare("INSERT INTO envolvidos
                  (nome,
                  tipo_de_documento, 
@@ -69,7 +70,46 @@ class EnvolvidoDAOMySql implements envolvidoDAO
 
             return true;
         }
+
         return false;
+    }
+
+    public function atualizarEnvolvidos($envolvidos, $id_ocorrencia)
+    {
+
+        if (!empty($envolvidos)) {
+            foreach ($envolvidos as $envolvido) {
+                if (!isset($envolvido['id'])) {
+                    $sql = $this->pdo->prepare("INSERT INTO envolvidos
+                 (nome,
+                 tipo_de_documento, 
+                 numero_documento, 
+                 envolvimento,
+                 vinculo,
+                 tipo_veiculo,
+                 placa, 
+                 id_ocorrencia) 
+                 VALUES (
+                 :nome, 
+                 :tipo_de_documento, 
+                 :numero_documento, 
+                 :envolvimento, 
+                 :vinculo,
+                 :tipo_veiculo,
+                 :placa,
+                 :id_ocorrencia)");
+                    $sql->bindValue(':nome', $envolvido['nome']);
+                    $sql->bindValue(':tipo_de_documento', $envolvido['tipo_documento']);
+                    $sql->bindValue(':numero_documento', $envolvido['numero_documento']);
+                    $sql->bindValue(':envolvimento', $envolvido['envolvimento']);
+                    $sql->bindValue(':vinculo', $envolvido['vinculo']);
+                    $sql->bindValue(':tipo_veiculo', $envolvido['tipo_veiculo']);
+                    $sql->bindValue(':placa', $envolvido['placa']);
+                    $sql->bindValue(':id_ocorrencia', $id_ocorrencia);
+                    $sql->execute();
+                }
+            }
+        }
     }
 
     public function excluirEnvolvidosByOcorrencia($id_ocorrencia)
@@ -94,6 +134,6 @@ class EnvolvidoDAOMySql implements envolvidoDAO
             $sql = $this->pdo->prepare("DELETE FROM envolvidos WHERE id = :id;");
             $sql->bindValue(':id', $id);
             $sql->execute();
-        }  
+        }
     }
 }

@@ -39,12 +39,12 @@ require 'partials/header.php';
                 <label for="validationServer04" class="form-label">Equipe Operacional</label>
                 <select class="form-select" aria-label="Default select example" name="equipe" id="equipe">
                     <option selected></option>
-                    <option value="Apoio ao Motorista">Dragão
-                    <option value="Armazém da Receita Federal">Falcão</option>
-                    <option value="Armazém Geral 1">Leão</option>
-                    <option value="Armazém Geral 2">Tubarão</option>
-                    <option value="Armazém Geral 3">Crossdocking</option>
-                    <option value="Bolsão">DEPOT</option>
+                    <option value="Dragão">Dragão
+                    <option value="Falcão">Falcão</option>
+                    <option value="Leão">Leão</option>
+                    <option value="Tubarão">Tubarão</option>
+                    <option value="Crossdocking">Crossdocking</option>
+                    <option value="DEPOT">DEPOT</option>
                 </select>
             </div>
             <div class="col-md-6">
