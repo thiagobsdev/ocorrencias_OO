@@ -86,4 +86,14 @@ class EnvolvidoDAOMySql implements envolvidoDAO
             }
         }
     }
+
+    public function excluirEnvolvidoById($id)
+    {
+        if ($id) {
+
+            $sql = $this->pdo->prepare("DELETE FROM envolvidos WHERE id = :id;");
+            $sql->bindValue(':id', $id);
+            $sql->execute();
+        }  
+    }
 }

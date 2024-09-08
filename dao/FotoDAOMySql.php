@@ -69,4 +69,16 @@ class FotoDAOMySql implements FotoDAO
             }
         }
     }
+
+    public function excluirFotoById($id)
+    {
+        
+        if ($id) {
+
+            $sql = $this->pdo->prepare("DELETE FROM fotos WHERE id = :id;");
+            $sql->bindValue(':id', $id);
+            $sql->execute();
+        }
+        
+    }
 }

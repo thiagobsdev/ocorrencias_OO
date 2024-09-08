@@ -578,7 +578,7 @@ require 'partials/header.php';
                 </button>
             </div>
             <div class="modal-body">
-                Ativo excluído com sucesso.
+               Foto excluída com sucesso.
             </div>
         </div>
     </div>
@@ -608,10 +608,11 @@ require 'partials/header.php';
         // Confirmação de exclusão
         document.getElementById('confirmDeleteFotoButton').addEventListener('click', async function() {
             if (idFoto) {
+                console.log(idFoto);
                 let data = new FormData();
                 data.append('id', idFoto);
 
-                let req = await fetch(BASE + '/excluir/foto', {
+                let req = await fetch(BASE + 'excluir_foto.php', {
                     method: 'POST',
                     body: data
                 })
@@ -707,7 +708,7 @@ require 'partials/header.php';
                 let data = new FormData();
                 data.append('id', idAtivo);
 
-                let req = await fetch(BASE + '/excluir/ativo', {
+                let req = await fetch(BASE + 'excluir_ativo.php', {
                     method: 'POST',
                     body: data
                 })
@@ -808,7 +809,7 @@ require 'partials/header.php';
                 let data = new FormData();
                 data.append('id', idEnvolvido);
 
-                let req = await fetch(BASE + '/excluir/envolvido', {
+                let req = await fetch(BASE + 'excluir_envolvido.php', {
                     method: 'POST',
                     body: data
                 })

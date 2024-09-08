@@ -65,4 +65,16 @@ class AtivoDAOMySql implements ativoDAO
             }
         }
     }
+
+    public function excluirAtivoById($id)
+    {
+        
+        if ($id) {
+
+            $sql = $this->pdo->prepare("DELETE FROM ativos WHERE id = :id;");
+            $sql->bindValue(':id', $id);
+            $sql->execute();
+        }
+        
+    }
 }
