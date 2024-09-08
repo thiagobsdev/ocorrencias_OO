@@ -30,8 +30,6 @@ $envolvidos = $_POST['envolvidos'];
 $ativos = $_POST['ativos'];
 $arquivosFotos = $_FILES['fotos'];
 
-// print_r($ativos);
-
 if (
     $equipe &&
     $forma_conhecimento &&

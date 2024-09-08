@@ -21,7 +21,7 @@ require 'partials/header.php';
         <h1 class="" style="text-align:center;margin-bottom: 40px;padding-top:10px">Edição da Ocorrência Numero: <?= $ocorrencia->id; ?></h1>
 
         <input type="hidden" name="idOcorrencia" value="<?= $ocorrencia->id; ?>">
-        <form class="row g-3" class="formOcorrencia" enctype="multipart/form-data" method="POST" id="formEdit" action="<?= $base; ?>editar_action.php?ocorrencia_id=<?= $ocorrencia->id?>">
+        <form class="row g-3" class="formOcorrencia" enctype="multipart/form-data" method="POST" id="formEdit" action="<?= $base; ?>editar_action.php?ocorrencia_id=<?= $ocorrencia->id ?>">
             <div class="col-md-6">
                 <label for="validationServer04" class="form-label">Equipe Operacional</label>
                 <select class="form-select" aria-label="Default select example" name="equipe" id="equipe">
@@ -178,7 +178,7 @@ require 'partials/header.php';
                             </div>
                             <div class="col-4 md-4 mt-2" id="veiculoPlaca" style="display: none;">
                                 <label for="placa" class="form-label">Placa</label>
-                                <input type="text" class="form-control" id="placaEdit" placeholder="Placa" placeholder="Placa" maxlength="8" pattern="[A-Za-z]{3}-\d{4}" title="A placa deve estar no formato XXX-XXXX">
+                                <input type="text" class="form-control" id="placa" placeholder="Placa" placeholder="Placa" maxlength="8" pattern="[A-Za-z]{3}-\d{4}" title="A placa deve estar no formato XXX-XXXX">
                             </div>
                         </div>
                         <div class="d-flex justify-content-center mt-5">
@@ -367,7 +367,7 @@ require 'partials/header.php';
 <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    document.getElementById('placaEdit').addEventListener('input', function(e) {
+    document.getElementById('placa').addEventListener('input', function(e) {
         let input = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
 
         if (input.length > 3) {
@@ -578,7 +578,7 @@ require 'partials/header.php';
                 </button>
             </div>
             <div class="modal-body">
-               Foto excluída com sucesso.
+                Foto excluída com sucesso.
             </div>
         </div>
     </div>
@@ -853,9 +853,10 @@ require 'partials/header.php';
         })
 
         for (let i = 0; i < envolvidosListEdit.rows.length; i++) {
+
             const cells = envolvidosListEdit.rows[i].cells;
 
-            console.log(envolvidosListEdit.rows.length)
+
 
             adicionarHiddenInput(formEdit, `envolvidos[${i}][nome]`, cells[0].textContent);
             adicionarHiddenInput(formEdit, `envolvidos[${i}][tipoDocumento]`, cells[1].textContent);
@@ -909,6 +910,10 @@ require 'partials/header.php';
         const temVeiculo = document.getElementById('temVeiculo').value;
         const tipoVeiculo = temVeiculo === 'sim' ? document.getElementById('tipoVeiculo').value : '';
         const placa = temVeiculo === 'sim' ? document.getElementById('placa').value : '';
+
+        console.log(temVeiculo)
+        console.log(tipoVeiculo)
+        console.log(placa)
 
         if (!nome || !tipoDocumento || !envolvimento || !numeroDocumento || !vinculo || (temVeiculo === 'sim' && (!tipoVeiculo || !placa))) {
             alert("Por favor, preencha todos os campos obrigatórios antes de adicionar.");
