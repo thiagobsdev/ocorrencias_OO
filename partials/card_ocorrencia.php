@@ -11,7 +11,7 @@
                 <button style="margin-left: 10px; margin-right: 10px" class="btn btn-warning" onclick="window.location.href='<?= $base; ?>editar.php?ocorrencia_id=<?= $ocorrencia->id; ?>'">Editar</button>
 
             <?php endif; ?>
-            <button class="btn btn-secondary print-btn" onclick="window.location.href='<?= $base; ?>/imprimir/<?= $ocorrencia->id; ?>'">Imprimir PDF</button>
+            <button class="btn btn-secondary print-btn" onclick="window.location.href='<?= $base; ?>imprimir.php?ocorrencia_id=<?= $ocorrencia->id; ?>'">Imprimir PDF</button>
         </div>
     </div>
     <div class="card-body ocorrencia-content" id="ocorrencia-001">
