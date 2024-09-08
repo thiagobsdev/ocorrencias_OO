@@ -2,6 +2,7 @@
 
 require_once 'models/Foto.php';
 
+use src\models\Foto;
 use src\models\FotoDAO;
 
 class FotoDAOMySql implements FotoDAO
@@ -12,6 +13,18 @@ class FotoDAOMySql implements FotoDAO
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
+    }
+
+    public function arrayFotoParaObjetoFoto($array)
+    {
+
+        $novaFoto = new Foto();
+        $novaFoto->id = $array['id'] ?? 0;
+        $novaFoto->nome = $array['nome'] ?? "";
+        $novaFoto->url = $array['url'] ?? "";
+        $novaFoto->id_ocorrencia = $array['id_ocorrencia'] ?? "";
+        $novaFoto->id_usuario = $array['id_usuario'] ?? "";
+        return $novaFoto;
     }
 
     public function salvarFotos($arquivos, $data_ocorrencia, $id_ocorrencia, $id_usuario)

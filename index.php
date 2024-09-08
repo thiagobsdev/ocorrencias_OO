@@ -12,12 +12,6 @@ $getOcorrencias = new OcorrenciaDAOMySql($pdo);
 $userInfo = $auth->checkToken();
 $ocorrenciasArray = $getOcorrencias->listarTodasOcorrencias();
 
-$p = $ocorrenciasArray['paginaAtual'];
-
-// print_r($p);
-// exit;
-
-
 
 $ocorrencias = $ocorrenciasArray['ocorrencias'];
 

@@ -17,6 +17,22 @@ class EnvolvidoDAOMySql implements envolvidoDAO
         $this->pdo = $pdo;
     }
 
+    public function arrayEnvolvidoParaObjetoEnvolvido($array)
+    {
+
+        $novoEnvolvido = new Envolvido();
+        $novoEnvolvido->id = $array['id'] ?? 0;
+        $novoEnvolvido->nome = $array['nome'] ?? "";
+        $novoEnvolvido->tipo_de_documento = $array['tipo_de_documento'] ?? "";
+        $novoEnvolvido->numero_documento = $array['numero_documento'] ?? "";
+        $novoEnvolvido->envolvimento = $array['envolvimento'] ?? "";
+        $novoEnvolvido->vinculo = $array['vinculo'] ?? "";
+        $novoEnvolvido->tipo_veiculo = $array['tipo_veiculo'] ?? "";
+        $novoEnvolvido->placa = $array['placa'] ?? "";
+        $novoEnvolvido->id_ocorrencia = $array['id_ocorrencia'] ?? "";
+        return $novoEnvolvido;
+    }
+
     public function cadastrarEnvolvidos($envolvidos, $id_ocorrencia)
     {
 

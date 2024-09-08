@@ -90,7 +90,7 @@ class OcorrenciaDAOMySql implements OcorrenciaDAO
     public function listarTodasOcorrencias()
     {
         $listaOcorrencias = [];
-        $porPagina = 2;
+        $porPagina = 20;
         $paginaSolicitada = intval(filter_input(INPUT_GET, "p"));
 
         if ($paginaSolicitada < 1) {
@@ -178,6 +178,72 @@ class OcorrenciaDAOMySql implements OcorrenciaDAO
         return false;
     }
 
+
+    public function getOcorrenciaById()
+    {
+
+        $ocorrencia_id = intval(filter_input(INPUT_GET, "ocorrencia_id"));
+
+        if ($ocorrencia_id) {
+            $sql = $this->pdo->query("SELECT * FROM ocorrencias WHERE id=$ocorrencia_id");
+            if ($sql->rowCount() > 0) {
+                $ocorrenciaArray = $sql->fetch(PDO::FETCH_ASSOC);
+                $ocorrenciaEncontrada = $this->generateOcorrencias($ocorrenciaArray);
+
+                $sql = $this->pdo->query("SELECT * FROM usuarios WHERE id= $ocorrenciaEncontrada->usuario");
+                if ($sql->rowCount() > 0) {
+                    $usuarioArray = $sql->fetch(PDO::FETCH_ASSOC);
+                    $usuarioDAO = new UserDAOMySql($this->pdo);
+                    $ocorrenciaEncontrada->usuario =  $usuarioDAO->generateUser($usuarioArray);
+                }
+
+                $sql = $this->pdo->query("SELECT * FROM ativos WHERE id_ocorrencia= $ocorrenciaEncontrada->id");
+
+                if ($sql->rowCount() > 0) {
+                    $dataAtivos = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+                    $ocorrenciaEncontrada->ativosLista = [];
+                    foreach ($dataAtivos as $item) {
+                        $ativoDAO = new AtivoDAOMySql($this->pdo);
+                        $ativoEncontrado = $ativoDAO->arrayAtivoParaObjetoAtivo($item);
+                        array_push($ocorrenciaEncontrada->ativosLista, $ativoEncontrado);
+                    }
+                }
+
+                $sql = $this->pdo->query("SELECT * FROM envolvidos WHERE id_ocorrencia= $ocorrenciaEncontrada->id");
+                if ($sql->rowCount() > 0) {
+                    $dataEnvolvidos = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+                    $ocorrenciaEncontrada->envolvidosLista = [];
+                    foreach ($dataEnvolvidos as $item) {
+                        $envolvidosDAO = new EnvolvidoDAOMySql($this->pdo);
+                        $envolvidosEncontrado = $envolvidosDAO->arrayEnvolvidoParaObjetoEnvolvido($item);
+                        array_push($ocorrenciaEncontrada->envolvidosLista, $envolvidosEncontrado);
+                    }
+                }
+
+
+                $sql = $this->pdo->query("SELECT * FROM fotos WHERE id_ocorrencia= $ocorrenciaEncontrada->id");
+                if ($sql->rowCount() > 0) {
+                    $dataFoto = $sql->fetchAll(PDO::FETCH_ASSOC);
+                    $ocorrenciaEncontrada->fotosOcorrencias = [];
+                    foreach ($dataFoto as $item) {
+                        $fotoDAO = new FotoDAOMySql($this->pdo);
+                        $fotoEncontrada = $fotoDAO->arrayFotoParaObjetoFoto($item);
+                        array_push($ocorrenciaEncontrada->fotosOcorrencias, $fotoEncontrada);
+                    }
+                }
+
+                return $ocorrenciaEncontrada;
+
+                // echo '<pre>';
+                // print_r($ocorrenciaEncontrada);
+                // exit;
+            }
+        }
+        return false;
+    }
+
     public function excluirOcorrencia($id)
     {
         $ocorrenciaDeletada = "";
@@ -206,6 +272,5 @@ class OcorrenciaDAOMySql implements OcorrenciaDAO
             $fotosDAO = new FotoDAOMySql($this->pdo);
             $fotosDAO->excluirFotosByOcorrencia($id);
         }
-
     }
 }

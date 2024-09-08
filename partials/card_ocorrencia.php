@@ -1,14 +1,14 @@
 <div class="card mb-4 mb-3">
     <div class="card-header d-flex justify-content-between align-items-center">
         <div>
-            <strong>ID:</strong><?= " " . $ocorrencia->id. " "; ?>| <strong>Data:</strong> <?= " " . DateTime::createFromFormat('Y-m-d', $ocorrencia->data_ocorrencia)->format('d/m/Y') . " "; ?> | <strong>Hora:</strong> <?= " " . $ocorrencia->hora_ocorrencia . " "; ?>
+            <strong>ID:</strong><?= " " . $ocorrencia->id . " "; ?>| <strong>Data:</strong> <?= " " . DateTime::createFromFormat('Y-m-d', $ocorrencia->data_ocorrencia)->format('d/m/Y') . " "; ?> | <strong>Hora:</strong> <?= " " . $ocorrencia->hora_ocorrencia . " "; ?>
             <strong>Registrado por:</strong> <?= " " . $ocorrencia->usuario->nome . " "; ?>
         </div>
         <div>
             <?php if ($userInfo->nivel === "Administrador") :  ?>
 
                 <button data-id="<?= $ocorrencia->id; ?>" href="<?= $base; ?>/excluir/<?= $ocorrencia->id; ?>" class="btn-excluir btn btn-danger">Excluir</button>
-                <button style="margin-left: 10px; margin-right: 10px" class="btn btn-warning" onclick="window.location.href='<?= $base; ?>/editar/<?= $ocorrencia->id; ?>'">Editar</button>
+                <button style="margin-left: 10px; margin-right: 10px" class="btn btn-warning" onclick="window.location.href='<?= $base; ?>editar.php?ocorrencia_id=<?= $ocorrencia->id; ?>'">Editar</button>
 
             <?php endif; ?>
             <button class="btn btn-secondary print-btn" onclick="window.location.href='<?= $base; ?>/imprimir/<?= $ocorrencia->id; ?>'">Imprimir PDF</button>

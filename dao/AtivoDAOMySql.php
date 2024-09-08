@@ -25,9 +25,6 @@ class AtivoDAOMySql implements ativoDAO
         $novoAtivo->tipo_ativo = $array['tipo_ativo'] ?? "";
         $novoAtivo->id_ativo = $array['id_ativo'] ?? "";
         $novoAtivo->id_ocorrencia = $array['id_ocorrencia'] ?? "";
-
-        // print_r($novoAtivo);
-        // exit;
         return $novoAtivo;
     }
 
