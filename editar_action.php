@@ -82,3 +82,5 @@ if (
         $fotosDAO->salvarFotos($arquivosFotos, $data_ocorrencia, $id_ocorrencia, $id_usuario);
     }
 }
+header("Location: " . $base . "index.php");
+exit;

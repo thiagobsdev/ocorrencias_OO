@@ -74,7 +74,7 @@ if (
         $fotosDAO = new FotoDAOMySql($pdo);
         $fotosDAO->salvarFotos($arquivosFotos, $data_ocorrencia, $id_ocorrencia, $id_usuario);
     }
-
-    header("Location: " . $base . "index.php");
-    exit;
 }
+
+header("Location: " . $base . "index.php");
+exit;
