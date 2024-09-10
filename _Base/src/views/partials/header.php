@@ -55,9 +55,9 @@
                                     Pesquisas
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="<?= $base; ?>/pesquisa_id">Pesquisa por ID</a>
-                                    <a class="dropdown-item" href="<?= $base; ?>/pesquisa_envolvido">Pesquisa por envolvido</a>
-                                    <a class="dropdown-item" href="<?= $base; ?>/pesquisa_tipo_natureza">Pesquisa por tipo e natureza</a>
+                                    <a class="dropdown-item" href="<?= $base; ?>pesquisa_id.php">Pesquisa por ID</a>
+                                    <a class="dropdown-item" href="<?= $base; ?>pesquisa_envolvido.php">Pesquisa por envolvido</a>
+                                    <a class="dropdown-item" href="<?= $base; ?>pesquisa_tipo_natureza.php">Pesquisa por tipo e natureza</a>
                                 </div>
                             </li>
                             <?php if ($usuariologado['nivel'] === "Administrador"): ?>
