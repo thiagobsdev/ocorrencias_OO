@@ -334,4 +334,94 @@ class OcorrenciaDAOMySql implements OcorrenciaDAO
             $fotosDAO->excluirFotosByOcorrencia($id);
         }
     }
+
+    public function getOcorrenciaByDates($data_inicio, $data_fim)
+    {
+        $listaOcorrencias = [];
+        $porPagina = 20;
+        $paginaSolicitada = intval(filter_input(INPUT_GET, "p"));
+
+        if ($paginaSolicitada < 1) {
+            $paginaSolicitada = 1;
+        }
+
+        $offset = ($paginaSolicitada - 1) * $porPagina;
+
+        $sql = $this->pdo->query("SELECT COUNT(*) AS c FROM ocorrencias");
+        $totalDeLinhas = $sql->fetch();
+        $totalDeOcorrencias =   $totalDeLinhas['c'];
+
+        $contagemPaginas = ceil($totalDeOcorrencias / $porPagina);
+        $paginaInicial = (ceil($paginaSolicitada / $porPagina) * -1) * $porPagina + 1;
+        $paginaFinal = min($paginaSolicitada + $porPagina - 1, $contagemPaginas);
+
+        $sql = $this->pdo->query("SELECT * FROM ocorrencias
+                         WHERE data_ocorrencia >= '$data_inicio' AND data_ocorrencia <= '$data_fim'
+                         ORDER BY data_ocorrencia DESC, 
+                         hora_ocorrencia DESC
+                         LIMIT $offset, $porPagina");
+
+
+        if ($sql->rowCount() > 0) {
+            $ocorrenciaListaArray = $sql->fetchAll(PDO::FETCH_ASSOC);
+            $ocorrenciasLista = array_filter($ocorrenciaListaArray, function ($item) {
+                return !empty($item);
+            });
+
+            foreach ($ocorrenciasLista as $ocorrenciaItem) {
+                $novaOcorrencia = $this->generateOcorrencias($ocorrenciaItem);
+
+                $sql = $this->pdo->prepare("SELECT * FROM usuarios WHERE id=:id_usuario");
+                $sql->bindValue(':id_usuario', $novaOcorrencia->usuario);
+                $sql->execute();
+
+                if ($sql->rowCount() > 0) {
+                    $data = $sql->fetch(PDO::FETCH_ASSOC);
+                    $usuarioDAO = new UserDAOMySql($this->pdo);
+                    $novaOcorrencia->usuario = $usuarioDAO->generateUser($data);
+                }
+
+                $sql = $this->pdo->prepare("SELECT * FROM ativos WHERE id_ocorrencia=:id_ocorrencia");
+                $sql->bindValue(':id_ocorrencia', $novaOcorrencia->id);
+                $sql->execute();
+
+                if ($sql->rowCount() > 0) {
+                    $dataAtivos = $sql->fetchAll(PDO::FETCH_ASSOC);
+                    $novaOcorrencia->ativosLista = $dataAtivos;
+                }
+
+                $sql = $this->pdo->prepare("SELECT * FROM envolvidos WHERE id_ocorrencia=:id_ocorrencia");
+                $sql->bindValue(':id_ocorrencia', $novaOcorrencia->id);
+                $sql->execute();
+
+                if ($sql->rowCount() > 0) {
+                    $dataEnvolvidos = $sql->fetchAll(PDO::FETCH_ASSOC);
+                    $novaOcorrencia->envolvidosLista = $dataEnvolvidos;
+                }
+
+                $sql = $this->pdo->prepare("SELECT * FROM fotos WHERE id_ocorrencia=:id_ocorrencia");
+                $sql->bindValue(':id_ocorrencia', $novaOcorrencia->id);
+                $sql->execute();
+
+                if ($sql->rowCount() > 0) {
+                    $data = $sql->fetchAll(PDO::FETCH_ASSOC);
+                    $novaOcorrencia->fotosOcorrencias = $data;
+                }
+
+                $listaOcorrencias[] = $novaOcorrencia;
+            }
+
+
+            return [
+                'ocorrencias' => $listaOcorrencias,
+                'porPagina' => $contagemPaginas,
+                'paginaAtual' => $paginaSolicitada,
+                'paginaInicial' => $paginaInicial,
+                'paginaFinal' => $paginaFinal,
+                'totalDePaginas' => $contagemPaginas
+
+            ];
+        }
+        return false;
+    }
 }
