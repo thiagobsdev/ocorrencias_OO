@@ -136,4 +136,25 @@ class EnvolvidoDAOMySql implements envolvidoDAO
             $sql->execute();
         }
     }
+
+    public function getEnvolvidosByNomeDocumentoAndEnvolvimento($nome, $documento, $envolvimento)
+    {
+
+        $sql = $this->pdo->query(
+            "SELECT * FROM envolvidos
+                         WHERE (nome LIKE COALESCE(NULLIF(@$nome, ''), '$nome%'))
+                            AND (numero_documento LIKE COALESCE(NULLIF(@$documento, ''), '%$documento'))
+                            AND (envolvimento LIKE COALESCE(NULLIF(@$envolvimento, ''), '%$envolvimento'));
+
+        "
+        );
+        if ($sql->rowCount() > 0) {
+
+            $dataEnvolvidos = $sql->fetchAll(PDO::FETCH_ASSOC);
+            $ocorrenciasID = array_column($dataEnvolvidos, 'id_ocorrencia');
+            $idsUnicos =  array_unique($ocorrenciasID);
+            arsort($idsUnicos);
+            return  $idsUnicos;
+        }
+    }
 }

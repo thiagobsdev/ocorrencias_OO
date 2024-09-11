@@ -301,7 +301,7 @@ class OcorrenciaDAOMySql implements OcorrenciaDAO
         return false;
     }
 
-     public function getOcorrenciaByIdFilter($id_ocorrencia)
+    public function getOcorrenciaByIdFilter($id_ocorrencia)
     {
 
         if ($id_ocorrencia) {
@@ -475,6 +475,85 @@ class OcorrenciaDAOMySql implements OcorrenciaDAO
                 'paginaFinal' => $paginaFinal,
                 'totalDePaginas' => $contagemPaginas
 
+            ];
+        }
+        return false;
+    }
+
+    public function getOcorrenciaByEnvolvido(
+        $nomeEnvolvido,
+        $numeroDocumentoEnvolvido,
+        $envolvimentoEnvolvido,
+        $dataInicio,
+        $dataFim
+    ) {
+        $envolvidosDAO = new EnvolvidoDAOMySql($this->pdo);
+        $listaEnvolvido =  $envolvidosDAO->getEnvolvidosByNomeDocumentoAndEnvolvimento(
+            $nomeEnvolvido,
+            $numeroDocumentoEnvolvido,
+            $envolvimentoEnvolvido
+        );
+
+        ($dataInicio === "") ? $dataInicio = '1990-01-01' : $dataInicio;
+        ($dataFim === '') ?  $dataFim = '2100-12-31' : $dataFim;
+
+        if (!empty($listaEnvolvido)) {
+            $listaOcorrencias = [];
+
+
+            foreach ($listaEnvolvido as $envolvido) {
+
+                $idOcorrencia = $envolvido;
+                $novaOcorrencia = [];
+                $sql = $this->pdo->query("SELECT * FROM ocorrencias
+                     WHERE data_ocorrencia >= '$dataInicio' AND data_ocorrencia <= '$dataFim'
+                     AND id = $idOcorrencia
+                    ");
+                $novaOcorrenciaArray = $sql->fetch(PDO::FETCH_ASSOC);
+                $novaOcorrencia = $this->generateOcorrencias($novaOcorrenciaArray);
+
+                $sql = $this->pdo->prepare("SELECT * FROM usuarios WHERE id=:id_usuario");
+                $sql->bindValue(':id_usuario', $novaOcorrencia->usuario);
+                $sql->execute();
+
+                if ($sql->rowCount() > 0) {
+                    $data = $sql->fetch(PDO::FETCH_ASSOC);
+                    $usuarioDAO = new UserDAOMySql($this->pdo);
+                    $novaOcorrencia->usuario = $usuarioDAO->generateUser($data);
+                }
+
+                $sql = $this->pdo->prepare("SELECT * FROM ativos WHERE id_ocorrencia=:id_ocorrencia");
+                $sql->bindValue(':id_ocorrencia', $novaOcorrencia->id);
+                $sql->execute();
+
+                if ($sql->rowCount() > 0) {
+                    $dataAtivos = $sql->fetchAll(PDO::FETCH_ASSOC);
+                    $novaOcorrencia->ativosLista = $dataAtivos;
+                }
+
+                $sql = $this->pdo->prepare("SELECT * FROM envolvidos WHERE id_ocorrencia=:id_ocorrencia");
+                $sql->bindValue(':id_ocorrencia', $novaOcorrencia->id);
+                $sql->execute();
+
+                if ($sql->rowCount() > 0) {
+                    $dataEnvolvidos = $sql->fetchAll(PDO::FETCH_ASSOC);
+                    $novaOcorrencia->envolvidosLista = $dataEnvolvidos;
+                }
+
+                $sql = $this->pdo->prepare("SELECT * FROM fotos WHERE id_ocorrencia=:id_ocorrencia");
+                $sql->bindValue(':id_ocorrencia', $novaOcorrencia->id);
+                $sql->execute();
+
+                if ($sql->rowCount() > 0) {
+                    $data = $sql->fetchAll(PDO::FETCH_ASSOC);
+                    $novaOcorrencia->fotosOcorrencias = $data;
+                }
+                if (!$novaOcorrencia->id == 0) {
+                    $listaOcorrencias[] = $novaOcorrencia;
+                }
+            }
+            return [
+                'ocorrencias' => $listaOcorrencias
             ];
         }
         return false;
