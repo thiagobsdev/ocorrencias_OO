@@ -558,4 +558,76 @@ class OcorrenciaDAOMySql implements OcorrenciaDAO
         }
         return false;
     }
+
+    public function getOcorrenciaByTipoAndNatureza(
+        $tipo,
+        $natureza,
+        $dataInicio,
+        $dataFim
+    ) {
+
+        if (!empty($tipo)) {
+            $listaOcorrencias = [];
+
+            $sql = $this->pdo->query(
+                "SELECT * FROM ocorrencias
+                         WHERE tipo_natureza = '$tipo'
+                            AND natureza  = '$natureza'
+                            AND (data_ocorrencia >= '$dataInicio' AND data_ocorrencia <= '$dataFim');"
+            );
+
+            if ($sql->rowCount() > 0) {
+                $ocorrenciaListaArray = $sql->fetchAll(PDO::FETCH_ASSOC);
+                $ocorrenciasLista = array_filter($ocorrenciaListaArray, function ($item) {
+                    return !empty($item);
+                });
+                foreach ($ocorrenciasLista as $ocorrenciaItem) {
+                    $novaOcorrencia = $this->generateOcorrencias($ocorrenciaItem);
+
+                    $sql = $this->pdo->prepare("SELECT * FROM usuarios WHERE id=:id_usuario");
+                    $sql->bindValue(':id_usuario', $novaOcorrencia->usuario);
+                    $sql->execute();
+
+                    if ($sql->rowCount() > 0) {
+                        $data = $sql->fetch(PDO::FETCH_ASSOC);
+                        $usuarioDAO = new UserDAOMySql($this->pdo);
+                        $novaOcorrencia->usuario = $usuarioDAO->generateUser($data);
+                    }
+
+                    $sql = $this->pdo->prepare("SELECT * FROM ativos WHERE id_ocorrencia=:id_ocorrencia");
+                    $sql->bindValue(':id_ocorrencia', $novaOcorrencia->id);
+                    $sql->execute();
+
+                    if ($sql->rowCount() > 0) {
+                        $dataAtivos = $sql->fetchAll(PDO::FETCH_ASSOC);
+                        $novaOcorrencia->ativosLista = $dataAtivos;
+                    }
+
+                    $sql = $this->pdo->prepare("SELECT * FROM envolvidos WHERE id_ocorrencia=:id_ocorrencia");
+                    $sql->bindValue(':id_ocorrencia', $novaOcorrencia->id);
+                    $sql->execute();
+
+                    if ($sql->rowCount() > 0) {
+                        $dataEnvolvidos = $sql->fetchAll(PDO::FETCH_ASSOC);
+                        $novaOcorrencia->envolvidosLista = $dataEnvolvidos;
+                    }
+
+                    $sql = $this->pdo->prepare("SELECT * FROM fotos WHERE id_ocorrencia=:id_ocorrencia");
+                    $sql->bindValue(':id_ocorrencia', $novaOcorrencia->id);
+                    $sql->execute();
+
+                    if ($sql->rowCount() > 0) {
+                        $data = $sql->fetchAll(PDO::FETCH_ASSOC);
+                        $novaOcorrencia->fotosOcorrencias = $data;
+                    }
+
+                    $listaOcorrencias[] = $novaOcorrencia;
+                }
+            }
+            return [
+                'ocorrencias' => $listaOcorrencias,
+            ];
+        }
+        return false;
+    }
 }

@@ -8,11 +8,8 @@ require_once 'dao/OcorrenciaDAOMySql.php';
 
 $auth = new Auth($pdo, $base);
 $ocorrenciaDAO = new OcorrenciaDAOMySql($pdo);
-
 $userInfo = $auth->checkToken();
 
-$idOcorrencia = abs(intval(filter_input(INPUT_POST, 'id_ocorrencia')));
-$ocorrencia = $ocorrenciaDAO->getOcorrenciaByIdFilter($idOcorrencia);
 
 require 'partials/header.php';
 
@@ -29,19 +26,7 @@ require 'partials/header.php';
                 class="flash"><?php echo $flash; ?></div>
         <?php endif; ?>
         <!-- Toggle para o Card de Filtros -->
-        <?php require 'partials/card_filtro_id.php'; ?>
-
-        <div class="row">
-            <div class="col">
-                <!-- Card Ocorrências -->
-                <?php if (!empty($ocorrencias)) : ?>
-                    <?php require 'partials/card_ocorrencia_by_FilterID.php' ?>
-                <?php else: ?>
-                    Nenhuma ocorrência encontrada!
-                <?php endif; ?>
-            </div>
-
-        </div>
+        <?php require 'partials/card_filtro_tipo_natureza.php'; ?>
     </div>
 
     <?php require 'partials/footer.php' ?>

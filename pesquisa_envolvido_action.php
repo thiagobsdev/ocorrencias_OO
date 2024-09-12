@@ -19,11 +19,6 @@ $dataFim = filter_input(INPUT_POST, 'dataFim');
 ($dataInicio === "") ? $dataInicio = '1990-01-01' : $dataInicio;
 ($dataFim === '') ?  $dataFim = '2100-12-31' : $dataFim;
 
-
-// ($nomeEnvolvido !== "") ? $nomeEnvolvido : $nomeEnvolvido = '*';
-// ($numeroDocumentoEnvolvido !== "") ?  $numeroDocumentoEnvolvido : $numeroDocumentoEnvolvido = '*';
-// ($envolvimentoEnvolvido !== "") ? $envolvimentoEnvolvido :  $envolvimentoEnvolvido = '*';
-
 $ocorrenciasArray = $ocorrenciaDAO->getOcorrenciaByEnvolvido(
     $nomeEnvolvido,
     $numeroDocumentoEnvolvido,
@@ -42,7 +37,6 @@ require 'partials/header.php';
 <div class="d-flex">
 
     <div class="container-xxl my-5">
-
 
         <h1 class="text-center mt-xxl-5 mt-xl-5 mt-md-5 mt-lg-5 mt-md-4 mt-5">OCORRÊNCIAS SEGURANÇA PATRIMONIAL</h1>
         <?php if (!empty($flash) && $flash == 'Ocorrencia editada com sucesso!'): ?>
@@ -63,7 +57,6 @@ require 'partials/header.php';
                     <?php echo 'Nenhuma ocorrência encontrada!' ?>
                 <?php endif; ?>
             </div>
-
         </div>
     </div>
 

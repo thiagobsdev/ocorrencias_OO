@@ -5,7 +5,7 @@
             <h5 class="mb-0">Filtros de Pesquisa</h5>
         </div>
         <div class="card-body">
-            <form id="filter-form" method="POST" action="<?= $base; ?>/pesquisa_tipo_natureza">
+            <form id="filter-form" method="POST" action="<?= $base; ?>pesquisa_tipo_natureza_action.php">
                 <div class="row mb-3 d-flex justify-content-center align-content-center">
                     <div class="col-md-6">
                         <label for="validationServer04" class="form-label">Tipo de natureza</label>
