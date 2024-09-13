@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ocorrências Segurança Patrimonial</title>
     <link href="./css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= $base; ?>/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="<?= $base; ?>/styles.css">
-    <link rel="stylesheet" href="<?= $base; ?>/ocorrencia-css.css">
-    <link rel="shortcut icon" href="<?= $base; ?>/assets/fotos/logoDP-World.ico" type="image/x-icon">
+    <link rel="stylesheet" href="<?= $base; ?>bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= $base; ?>styles.css">
+    <link rel="stylesheet" href="<?= $base; ?>ocorrencia-css.css">
+    <link rel="shortcut icon" href="<?= $base; ?>assets/fotos/logoDP-World.ico" type="image/x-icon">
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
@@ -79,7 +79,7 @@
                 <span>
                     Olá, <?= $userInfo->nome; ?>
                 </span>
-                <a style="margin-left:20px; margin-right:20px;" class="nav-link alterarSenha" href="<?= $base; ?>/alterar_senha">Alterar senha</a>
+                <a style="margin-left:20px; margin-right:20px;" class="nav-link alterarSenha" href="<?= $base; ?>alterar_senha_usuario_logado.php">Alterar senha</a>
                 <a class="nav-link" href="<?= $base; ?>logout.php">Sair</a>
             </div>
         </div>

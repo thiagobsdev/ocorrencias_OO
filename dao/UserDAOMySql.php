@@ -234,4 +234,30 @@ class UserDAOMySql implements UserDAO
 
         return false;
     }
+
+    public function alteraSenhaUsuarioLogado($senhaAtual, $novaSenha, $id_usuario)
+    {
+        if ($id_usuario) {
+            $sql = $this->pdo->query("SELECT * FROM usuarios WHERE id = $id_usuario");
+
+            if ($sql->rowCount() > 0) {
+                $data = $sql->fetch(PDO::FETCH_ASSOC);
+                $usuarioEncontrado = $this->generateUser($data);
+                if (!empty($usuarioEncontrado)) {
+                    if (password_verify($senhaAtual, $usuarioEncontrado->senha)) {
+                        $hash = password_hash($novaSenha, PASSWORD_DEFAULT);
+                        $sql = $this->pdo->prepare("UPDATE usuarios 
+                                            SET 
+                                            senha = '$hash'
+                                            WHERE id = :id_usuario ");
+
+                        $sql->bindValue(':id_usuario', $usuarioEncontrado->id);
+                        $sql->execute();
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

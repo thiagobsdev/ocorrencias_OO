@@ -12,8 +12,9 @@ $getOcorrencias = new OcorrenciaDAOMySql($pdo);
 $userInfo = $auth->checkToken();
 $ocorrenciasArray = $getOcorrencias->listarTodasOcorrencias();
 
-
-$ocorrencias = $ocorrenciasArray['ocorrencias'];
+if (!empty($ocorrenciasArray)) {
+    $ocorrencias = $ocorrenciasArray['ocorrencias'];
+}
 
 require 'partials/header.php';
 ?>
@@ -34,32 +35,33 @@ require 'partials/header.php';
 
         <div class="row">
             <div class="col">
-                <?php foreach ($ocorrencias as $ocorrencia): ?>
-
-                    <!-- Card Ocorrências -->
-                    <?php require 'partials/card_ocorrencia.php' ?>
-
-
-                <?php endforeach; ?>
+                <?php if (!empty($ocorrencias)) : ?>
+                    <?php foreach ($ocorrencias as $ocorrencia): ?>
+                        <!-- Card Ocorrências -->
+                        <?php require 'partials/card_ocorrencia.php' ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <?php echo 'Nenhuma ocorrencia registrada!' ;?>    
+                <?php endif; ?>
             </div>
 
         </div>
-
+        <?php if(!empty($ocorrenciasArray)) : ?>
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <!-- Link para a página anterior -->
                 <li class="page-item <?php if ($ocorrenciasArray['paginaAtual']  <= 1) {
                                             echo 'disabled';
                                         } ?>">
-                    <a class="page-link" href="<?= $base;?>?p=<?php $ocorrenciasArray['paginaAtual'] - 1; ?>">Anterior</a>
+                    <a class="page-link" href="<?= $base; ?>?p=<?php $ocorrenciasArray['paginaAtual'] - 1; ?>">Anterior</a>
                 </li>
 
                 <!-- Links para as páginas dentro do intervalo definido -->
                 <?php for ($i = 0; $i < $ocorrenciasArray['totalDePaginas']; $i++): ?>
-                    <li class="page-item <?php if ($i == $ocorrenciasArray['paginaAtual']-1) {
+                    <li class="page-item <?php if ($i == $ocorrenciasArray['paginaAtual'] - 1) {
                                                 echo 'active';
                                             } ?>">
-                        <a class="page-link" href="<?= $base; ?>?p=<?= $i+1; ?>"><?php echo $i + 1; ?></a>
+                        <a class="page-link" href="<?= $base; ?>?p=<?= $i + 1; ?>"><?php echo $i + 1; ?></a>
                     </li>
                 <?php endfor; ?>
 
@@ -71,6 +73,7 @@ require 'partials/header.php';
                 </li>
             </ul>
         </nav>
+        <?php endif ;?>
         <!-- Modal de Visualização PDF -->
         <div class="modal fade" id="printModal" tabindex="-1" aria-labelledby="printModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">

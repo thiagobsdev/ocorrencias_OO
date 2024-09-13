@@ -12,13 +12,11 @@ if ($usuarioDAO) {
     $usuarios = $usuarioDAO->getAllUsuarios();
 }
 
-
+require 'partials/header.php';
 ?>
 
-
-
 <body>
-    <?php require 'partials/header.php' ?>
+
     <div class="container mt-5">
         <?php if (!empty($_SESSION['flash'])): ?>
             <div class="flash" style="color: red; font-weight:bold;font-size: 18px; text-align:center"><?php echo $_SESSION['flash']; ?></div>
