@@ -9,20 +9,27 @@
     <link rel="stylesheet" href="<?= $base; ?>bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= $base; ?>styles.css">
     <link rel="stylesheet" href="<?= $base; ?>ocorrencia-css.css">
-    <link rel="stylesheet" href="/bootstrap-5.3.3-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/bootstrap-5.3.3-dist/css/bootstrap-utilities.min.css">
     <link rel="shortcut icon" href="<?= $base; ?>assets/fotos/logoDP-World.ico" type="image/x-icon">
-    <script src="/partials/js/header/popoer.js"></script>
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/partials/js/header/bootstrap.bundle2.min.js"></script>
+    <script src="/partials/js/header/popper2.min.js"></script>
+    <script src="/partials/js/header/jquery2-3.3.1.slim.min.js"></script>
+    <script src="/partials/js/header/popper3.min.js"></script>
+    <script src="/partials/js/header/bootstrap2.min.js"></script>
+
     <script src="/partials/js/header/jspdf2.umd.min.js"></script>
     <script src="/partials/js/header/html2canvas.min.js"></script>
     <script src=" es6-promise.auto.min.js "> </script>
-
-    <script src="/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
+    <script src=" jspdf.min.js "> </script>
+    <script src=" html2canvas.min.js "> </script>
+    <script src=" html2pdf.bundle.min.js "> </script>
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/partials/js/header/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
         const BASE = "<?= $base; ?>"
+        const dropdownElementList = document.querySelectorAll('.dropdown-toggle')
+        const dropdownList = [...dropdownElementList].map(dropdownToggleEl => new bootstrap.Dropdown(dropdownToggleEl))
     </script>
-    
 </head>
 
 
@@ -46,24 +53,18 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="<?= $base; ?>nova_ocorrencia.php" style="text-align:center">Novo Registro de Ocorrência</a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a style="text-align:center" class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Pesquisas
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="<?= $base; ?>pesquisa_id.php">Pesquisa por ID</a>
-                                    <a class="dropdown-item" href="<?= $base; ?>pesquisa_envolvido.php">Pesquisa por envolvido</a>
-                                    <a class="dropdown-item" href="<?= $base; ?>pesquisa_tipo_natureza.php">Pesquisa por tipo e natureza</a>
-                                </div>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= $base; ?>pesquisa_id.php" style="text-align:center">Pesquisa por ID</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= $base; ?>pesquisa_envolvido.php" style="text-align:center">Pesquisa por envolvido</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= $base; ?>pesquisa_tipo_natureza.php" style="text-align:center">Pesquisa por tipo e natureza</a>
                             </li>
                             <?php if ($userInfo->nivel === "Administrador"): ?>
-                                <li class="nav-item dropdown">
-                                    <a style="text-align:center" class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Administrador
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <a style="text-align:center" class="dropdown-item" href="<?= $base; ?>cadastro.php">Gerenciar usuários</a>
-                                    </div>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="<?= $base; ?>cadastro.php" style="text-align:center">Gerenciar usuários</a>
                                 </li>
                             <?php endif; ?>
                         </ul>

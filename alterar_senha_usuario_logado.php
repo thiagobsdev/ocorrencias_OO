@@ -58,7 +58,7 @@ require 'partials/header.php';
 </script>
 </script>
 <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/partials/js/alterar_senha_usuario_logado/bootstrap.bundle.min.js"></script>
 <script>
     document.getElementById('confirmPassword').addEventListener('blur', function() {
         const password = document.getElementById('newPassword').value;

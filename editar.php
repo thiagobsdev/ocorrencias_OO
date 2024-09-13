@@ -365,7 +365,7 @@ require 'partials/header.php';
 </main>
 
 <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/partials/js/editar/bootstrap.bundle.min.js"></script>
 <script>
     document.getElementById('placa').addEventListener('input', function(e) {
         let input = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
