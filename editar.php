@@ -1,6 +1,6 @@
 <?php
 
-use core\Request;
+
 
 require 'config.php';
 require 'models/Auth.php';
@@ -543,6 +543,18 @@ require 'partials/header.php';
 
     // Inicialização
     populateAreasEdit();
+
+    function abreModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.add('show');
+        modal.style.display = 'block';
+    }
+
+    function fechaModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+    }
 </script>
 
 
@@ -583,12 +595,6 @@ require 'partials/header.php';
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    function fechaModalConfirmacaoExclusaoFoto() {
-        $('#confirmDeleteFotoModal').modal('hide'); // fecha o modal de confirmação
-    }
-</script>
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -599,7 +605,7 @@ require 'partials/header.php';
             button.addEventListener('click', function() {
                 idFoto = this.getAttribute('data-id'); // Captura o ID da ocorrência
                 if (idFoto) {
-                    $('#confirmDeleteFotoModal').modal('show'); // Exibe o modal de confirmação
+                    abreModal('confirmDeleteFotoModal');
                 }
 
             });
@@ -621,12 +627,12 @@ require 'partials/header.php';
                     .then(json => {
                         if (json && json.status === 'success') { // Verifica se 'data' não é undefined ou null
                             // Exibe o modal de confirmação
-                            $('#confirmDeleteFotoModal').modal('hide');
-                            $('#confirmDeleteFotoMessage').modal('show');
+                            fechaModal('confirmDeleteFotoModal');
+                            abreModal('confirmDeleteFotoMessage');
 
                             // Aguarda 3 segundos e recarrega a página
                             setTimeout(function() {
-                                $('#confirmDeleteFotoMessage').modal('hide');
+                                fechaModal('confirmDeleteFotoMessage');
                                 location.reload();
                             }, 2000);
                         } else {
@@ -681,11 +687,7 @@ require 'partials/header.php';
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    function fechaModalConfirmacaoExclusaoAtivo() {
-        $('#confirmDeleteAtivoModal').modal('hide'); // fecha o modal de confirmação
-    }
-</script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -696,7 +698,7 @@ require 'partials/header.php';
             button.addEventListener('click', function() {
                 idAtivo = this.getAttribute('data-id'); // Captura o ID da ocorrência
                 if (idAtivo) {
-                    $('#confirmDeleteAtivoModal').modal('show'); // Exibe o modal de confirmação
+                    abreModal('confirmDeleteAtivoModal'); // Exibe o modal de confirmação
                 }
 
             });
@@ -717,21 +719,22 @@ require 'partials/header.php';
                     .then(json => {
                         if (json && json.status === 'success') { // Verifica se 'data' não é undefined ou null
                             // Exibe o modal de confirmação
-                            $('#confirmDeleteAtivoModal').modal('hide');
-                            $('#confirmDeleteAtivoMessage').modal('show');
+                            fechaModal('confirmDeleteAtivoModal');
+                            abreModal('confirmDeleteAtivoMessage');
 
                             // Aguarda 3 segundos e recarrega a página
                             setTimeout(function() {
-                                $('#confirmDeleteAtivoMessage').modal('hide');
+
+                                fechaModal('confirmDeleteAtivoMessage');
                                 location.reload();
                             }, 2000);
                         } else {
-                            alert('Erro ao excluir a ocorrência: ' + (json.message || 'Resposta inválida do servidor'));
+                            alert('Erro ao excluir o ativo: ' + (json.message || 'Resposta inválida do servidor'));
                         }
                     })
                     .catch(error => {
-                        console.error('Erro ao excluir a ocorrência:', error);
-                        alert('Ocorreu um erro ao tentar excluir a ocorrência. Por favor, tente novamente.');
+                        console.error('Erro ao excluir o ativo:', error);
+                        alert('Ocorreu um erro ao tentar excluir o ativo. Por favor, tente novamente.');
                     });
 
 
@@ -778,11 +781,7 @@ require 'partials/header.php';
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    function fechaModalConfirmacaoExclusaoEnvoldido() {
-        $('#confirmDeleteEnvolvidoModal').modal('hide'); // fecha o modal de confirmação
-    }
-</script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -793,7 +792,7 @@ require 'partials/header.php';
             button.addEventListener('click', function() {
                 idEnvolvido = this.getAttribute('data-id'); // Captura o ID da ocorrência
                 if (idEnvolvido) {
-                    $('#confirmDeleteEnvolvidoModal').modal('show'); // Exibe o modal de confirmação
+                    abreModal('confirmDeleteEnvolvidoModal')
                 }
 
             });
@@ -814,21 +813,21 @@ require 'partials/header.php';
                     .then(json => {
                         if (json && json.status === 'success') { // Verifica se 'data' não é undefined ou null
                             // Exibe o modal de confirmação
-                            $('#confirmDeleteEnvolvidoModal').modal('hide');
-                            $('#confirmDeleteEnvolvidoMessage').modal('show');
+                            fechaModal('confirmDeleteEnvolvidoModal');
+                            abreModal('confirmDeleteEnvolvidoMessage');
 
                             // Aguarda 3 segundos e recarrega a página
                             setTimeout(function() {
-                                $('#confirmDeleteEnvolvidoMessage').modal('hide');
+                                fechaModal('confirmDeleteEnvolvidoModal');
                                 location.reload();
                             }, 2000);
                         } else {
-                            alert('Erro ao excluir a ocorrência: ' + (json.message || 'Resposta inválida do servidor'));
+                            alert('Erro ao excluir o envolvido: ' + (json.message || 'Resposta inválida do servidor'));
                         }
                     })
                     .catch(error => {
-                        console.error('Erro ao excluir a ocorrência:', error);
-                        alert('Ocorreu um erro ao tentar excluir a ocorrência. Por favor, tente novamente.');
+                        console.error('Erro ao o envolvido:', error);
+                        alert('Ocorreu um erro ao tentar o envolvido. Por favor, tente novamente.');
                     });
 
 

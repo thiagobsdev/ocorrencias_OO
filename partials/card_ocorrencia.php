@@ -124,7 +124,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="confirmDeleteLabel">Confirmação de Exclusão</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="fechaModalConfirmacaoExclusao()">
+                <button type="button" class="close" aria-label="Close" onclick="fechaModalConfirmacaoExclusao()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -132,19 +132,20 @@
                 Você tem certeza de que deseja excluir esta ocorrência?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="fechaModalConfirmacaoExclusao()">Cancelar</button>
+                <button type="button" class="btn btn-secondary" onclick="fechaModalConfirmacaoExclusao()">Cancelar</button>
                 <button type="button" class="btn btn-danger" id="confirmDeleteButton">Excluir</button>
             </div>
         </div>
     </div>
 </div>
+
 <!-- Modal de Confirmação -->
 <div class="modal fade" id="confirmDeleteModalmessage" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="confirmDeleteLabel">Confirmação de Exclusão</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -154,13 +155,14 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    function fechaModalConfirmacaoExclusao() {
-        $('#confirmDeleteModal').modal('hide'); // fecha o modal de confirmação
-    }
-</script>
 
 <script>
+    // Função para fechar o modal de confirmação
+    function fechaModalConfirmacaoExclusao() {
+        document.getElementById('confirmDeleteModal').classList.remove('show');
+        document.getElementById('confirmDeleteModal').style.display = 'none';
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         let occurrenceId; // Variável para armazenar o ID da ocorrência
 
@@ -168,8 +170,9 @@
         document.querySelectorAll('.btn-excluir').forEach(button => {
             button.addEventListener('click', function() {
                 occurrenceId = this.getAttribute('data-id'); // Captura o ID da ocorrência
-                $('#confirmDeleteModal').modal('show'); // Exibe o modal de confirmação
-
+                let modal = document.getElementById('confirmDeleteModal');
+                modal.classList.add('show'); // Exibe o modal
+                modal.style.display = 'block';
             });
         });
 
@@ -182,40 +185,35 @@
                 let req = await fetch(BASE + '/excluir.php', {
                     method: 'POST',
                     body: data
-                })
+                });
 
-                let json = await req.json()
-                    .then(json => {
-                        if (json && json.status === 'success') { // Verifica se 'data' não é undefined ou null
-                            // Exibe o modal de confirmação
-                            $('#confirmDeleteModal').modal('hide');
-                            $('#confirmDeleteModalmessage').modal('show');
+                let json = await req.json();
+                if (json && json.status === 'success') {
+                    let deleteModal = document.getElementById('confirmDeleteModal');
+                    let messageModal = document.getElementById('confirmDeleteModalmessage');
 
-                            // Aguarda 3 segundos e recarrega a página
-                            setTimeout(function() {
-                                $('#confirmDeleteModalmessage').modal('hide');
-                                location.reload();
-                            }, 2000);
-                        } else {
-                            alert('Erro ao excluir a ocorrência: ' + (json.message || 'Resposta inválida do servidor'));
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erro ao excluir a ocorrência:', error);
-                        alert('Ocorreu um erro ao tentar excluir a ocorrência. Por favor, tente novamente.');
-                    });
+                    deleteModal.classList.remove('show');
+                    deleteModal.style.display = 'none';
 
+                    messageModal.classList.add('show');
+                    messageModal.style.display = 'block';
 
+                    // Aguarda 3 segundos e recarrega a página
+                    setTimeout(function() {
+                        messageModal.classList.remove('show');
+                        messageModal.style.display = 'none';
+                        location.reload();
+                    }, 2000);
+                } else {
+                    alert('Erro ao excluir a ocorrência: ' + (json.message || 'Resposta inválida do servidor'));
+                }
             }
         });
     });
 </script>
 
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <!-- Popper.js (necessário para os tooltips e popovers do Bootstrap) -->
 <script src="/partials/js/card_ocorrencia/popper.min.js"></script>
 
 <!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="/partials/js/card_ocorrencia/bootstrap.min.js"></script>

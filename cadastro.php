@@ -56,6 +56,7 @@ require 'partials/header.php';
             </div>
             <button type="submit" class="btn btn-primary">Salvar</button>
         </form>
+
         <!-- Tabela de Usuários -->
         <div class="mt-5">
             <h4>Lista de Usuários</h4>
@@ -92,293 +93,262 @@ require 'partials/header.php';
 
 </body>
 
-<div class="modal fade" id="confirmAlteraNivel" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+<!-- Modal de alteração de nível -->
+<div class="modal fade" id="confirmMudancaStatus" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteLabel">Confirmação de alteração de nivel de usuario</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="fechaModalAlteraNivel()">
+                <h5 class="modal-title" id="confirmDeleteLabel">Confirmação de mudança de status do usuário</h5>
+                <button type="button" class="close" aria-label="Close" onclick="fechaModal('confirmMudancaStatus')">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Você tem certeza de que deseja alterar nivel do usuário?
+                Você tem certeza de que deseja alterar o status do usuário?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="fechaModalAlteraNivel()">Cancelar</button>
-                <button type="button" class="btn btn-danger" id="confirmAlteraNivelAction">Alterar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal de Confirmação de alteração de reset de senha -->
-<div class="modal fade" id="confirmAlteraNivelMessage" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteLabel">Mudança de nivel</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Nivel do usuário alterado com sucesso!
-            </div>
-        </div>
-    </div>
-</div>
-<script type="text/javascript">
-    function fechaModalAlteraNivel() {
-        $('#confirmAlteraNivel').modal('hide'); // fecha o modal de confirmação
-    }
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let idUsuario; // Variável para armazenar o ID da ocorrência
-
-        // Captura o clique no botão de exclusão
-        document.querySelectorAll('#alterarNivel').forEach(button => {
-            button.addEventListener('click', function() {
-                idUsuario = this.getAttribute('data-id'); // Captura o ID da ocorrência
-                if (idUsuario) {
-                   
-                    $('#confirmAlteraNivel').modal('show'); // Exibe o modal de confirmação
-                }
-
-            });
-        });
-
-        // Confirmação de exclusão
-        document.getElementById('confirmAlteraNivelAction').addEventListener('click', async function() {
-            if (idUsuario) {
-                let data = new FormData();
-                data.append('id', idUsuario);
-
-                let req = await fetch(BASE + 'alterar_nivel.php', {
-                    method: 'POST',
-                    body: data,
-                    
-                })
-                
-
-                let json = await req.json()
-                    .then(json => {
-                        if (json && json.status === 'success') { // Verifica se 'data' não é undefined ou null
-                            // Exibe o modal de confirmação
-                            $('#confirmAlteraNivel').modal('hide');
-                            $('#confirmAlteraNivelMessage').modal('show');
-
-                            // Aguarda 3 segundos e recarrega a página
-                            setTimeout(function() {
-                                $('#confirmAlteraNivelMessage').modal('hide');
-                                location.reload();
-                            }, 2000);
-                        } else {
-                            alert('Erro ao alterar o nivel do usuário: ' + (json.message || 'Resposta inválida do servidor'));
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erro ao alterar o nivel do usuário:', error);
-                        console.log(idUsuario);
-                        alert('Ocorreu um erro ao tentar ao alterar alterar o nivel do usuário. Por favor, tente novamente.');
-                    });
-
-
-            }
-        });
-    });
-</script>
-
-<!-- Modal de Mudança de senha -->
-<div class="modal fade" id="confirmReseTSenha" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteLabel">Confirmação de alteração de senha</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="fechaModalMudancaDeSenha()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Você tem certeza de que deseja a senha do usuário?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="fechaModalMudancaDeSenha()">Cancelar</button>
-                <button type="button" class="btn btn-danger" id="confirmResetSenhaAction">Alterar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal de Confirmação de alteração de reset de senha -->
-<div class="modal fade" id="confirmResetSenhaMessage" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteLabel">Mudança de senha</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Senha do usuário alterada com sucesso!
-            </div>
-        </div>
-    </div>
-</div>
-<script type="text/javascript">
-    function fechaModalMudancaDeSenha() {
-        $('#confirmReseTSenha').modal('hide'); // fecha o modal de confirmação
-    }
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let idUsuario; // Variável para armazenar o ID da ocorrência
-
-        // Captura o clique no botão de exclusão
-        document.querySelectorAll('#resetarSenha').forEach(button => {
-            button.addEventListener('click', function() {
-                idUsuario = this.getAttribute('data-id'); // Captura o ID da ocorrência
-                if (idUsuario) {
-                    $('#confirmReseTSenha').modal('show'); // Exibe o modal de confirmação
-                }
-
-            });
-        });
-
-        // Confirmação de exclusão
-        document.getElementById('confirmResetSenhaAction').addEventListener('click', async function() {
-            if (idUsuario) {
-                let data = new FormData();
-                data.append('id', idUsuario);
-
-                let req = await fetch(BASE + 'resetar_senha.php', {
-                    method: 'POST',
-                    body: data
-                })
-
-                let json = await req.json()
-                    .then(json => {
-                        if (json && json.status === 'success') { // Verifica se 'data' não é undefined ou null
-                            // Exibe o modal de confirmação
-                            $('#confirmReseTSenha').modal('hide');
-                            $('#confirmResetSenhaMessage').modal('show');
-
-                            // Aguarda 3 segundos e recarrega a página
-                            setTimeout(function() {
-                                $('#confirmResetSenhaMessage').modal('hide');
-                                location.reload();
-                            }, 2000);
-                        } else {
-                            alert('Erro ao alterar alterar a senha: ' + (json.message || 'Resposta inválida do servidor'));
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erro ao alterar a senha:', error);
-                        alert('Ocorreu um erro ao tentar ao alterar a senha:. Por favor, tente novamente.');
-                    });
-
-
-            }
-        });
-    });
-</script>
-
-
-<!-- Modal de alteracao de status -->
-<div class="modal fade" id="confirmMudaStatus" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteLabel">Confirmação de mudança de status</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="fechaModalMudancaStatus()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Você tem certeza de que deseja mudar o status do usuário?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="fechaModalMudancaStatus()">Cancelar</button>
+                <button type="button" class="btn btn-secondary" onclick="fechaModal('confirmMudancaStatus')">Cancelar</button>
                 <button type="button" class="btn btn-danger" id="confirmMudancaStatusAction">Alterar</button>
             </div>
         </div>
     </div>
 </div>
-<!-- Modal de Confirmação de alteracao de status -->
-<div class="modal fade" id="confirmMudaStatusMessage" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+
+<!-- Modal de confirmação -->
+<div class="modal fade" id="confirmMudancaStatusMessage" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteLabel">Mudança de status</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title" id="confirmDeleteLabel">MUDANÇA DE STATUS</h5>
+                <button type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Usuario alterado com sucesso!
+                STATUS DO USUÁRIO ALTERADO COM SUCESSO!
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    function fechaModalMudancaStatus() {
-        $('#confirmMudaStatus').modal('hide'); // fecha o modal de confirmação
-    }
-</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let idUsuario; // Variável para armazenar o ID da ocorrência
+        let idUsuario;
 
-        // Captura o clique no botão de exclusão
+        // Captura o clique no botão de alterar nível
         document.querySelectorAll('#mudancaStatus').forEach(button => {
             button.addEventListener('click', function() {
-                idUsuario = this.getAttribute('data-id'); // Captura o ID da ocorrência
+                idUsuario = this.getAttribute('data-id');
                 if (idUsuario) {
-                    $('#confirmMudaStatus').modal('show'); // Exibe o modal de confirmação
+                    abreModal('confirmMudancaStatus');
                 }
-
             });
         });
 
-        // Confirmação de exclusão
+        // Confirmação de alteração de nível
         document.getElementById('confirmMudancaStatusAction').addEventListener('click', async function() {
             if (idUsuario) {
                 let data = new FormData();
                 data.append('id', idUsuario);
 
-                let req = await fetch(BASE + 'alterar_status_usuario.php', {
+                let req = await fetch('<?= $base; ?>alterar_status_usuario.php', {
                     method: 'POST',
                     body: data
-                })
+                });
 
-                let json = await req.json()
-                    .then(json => {
-                        if (json && json.status === 'success') { // Verifica se 'data' não é undefined ou null
-                            // Exibe o modal de confirmação
-                            $('#confirmMudaStatus').modal('hide');
-                            $('#confirmMudaStatusMessage').modal('show');
+                let json = await req.json();
+                if (json && json.status === 'success') {
+                    fechaModal('confirmMudancaStatus');
+                    abreModal('confirmMudancaStatusMessage');
 
-                            // Aguarda 3 segundos e recarrega a página
-                            setTimeout(function() {
-                                $('#confirmMudaStatusMessage').modal('hide');
-                                location.reload();
-                            }, 2000);
-                        } else {
-                            alert('Erro ao alterar status: ' + (json.message || 'Resposta inválida do servidor'));
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erro ao alterar status:', error);
-                        alert('Ocorreu um erro ao tentar ao alterar status:. Por favor, tente novamente.');
-                    });
-
-
+                    setTimeout(function() {
+                        fechaModal('confirmMudancaStatusMessage');
+                        location.reload();
+                    }, 2000);
+                } else {
+                    alert('Erro ao mudar o status do usuário: ' + (json.message || 'Resposta inválida do servidor'));
+                }
             }
         });
     });
 </script>
+
+<!-- Modal de alteração de nível -->
+<div class="modal fade" id="confirmResetarSenha" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteLabel">Confirmação de alteração de senhas de usuário</h5>
+                <button type="button" class="close" aria-label="Close" onclick="fechaModal('confirmResetarSenha')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Você tem certeza de que deseja resetar a senha do usuário?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="fechaModal('confirmResetarSenha')">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmResetarSenhaAction">Alterar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmação -->
+<div class="modal fade" id="confirmResetarSenhaMessage" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteLabel">RESET DE SENHA</h5>
+                <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                SENHA DO USUÁRIO REINICIADA COM SUCESSO
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let idUsuario;
+
+        // Captura o clique no botão de alterar nível
+        document.querySelectorAll('#resetarSenha').forEach(button => {
+            button.addEventListener('click', function() {
+                idUsuario = this.getAttribute('data-id');
+                if (idUsuario) {
+                    abreModal('confirmResetarSenha');
+                }
+            });
+        });
+
+        // Confirmação de alteração de nível
+        document.getElementById('confirmResetarSenhaAction').addEventListener('click', async function() {
+            if (idUsuario) {
+                let data = new FormData();
+                data.append('id', idUsuario);
+
+                let req = await fetch('<?= $base; ?>resetar_senha.php', {
+                    method: 'POST',
+                    body: data
+                });
+
+                let json = await req.json();
+                if (json && json.status === 'success') {
+                    fechaModal('confirmResetarSenha');
+                    abreModal('confirmResetarSenhaMessage');
+
+                    setTimeout(function() {
+                        fechaModal('confirmResetarSenhaMessage');
+                        location.reload();
+                    }, 2000);
+                } else {
+                    alert('Erro ao resetar a senha do usuário: ' + (json.message || 'Resposta inválida do servidor'));
+                }
+            }
+        });
+    });
+</script>
+
+
+
+<!-- Modal de alteração de nível -->
+<div class="modal fade" id="confirmAlteraNivel" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteLabel">Confirmação de alteração de nível de usuário</h5>
+                <button type="button" class="close" aria-label="Close" onclick="fechaModal('confirmAlteraNivel')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Você tem certeza de que deseja alterar o nível do usuário?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="fechaModal('confirmAlteraNivel')">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmAlteraNivelAction">Alterar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmação -->
+<div class="modal fade" id="confirmAlteraNivelMessage" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteLabel">Mudança de nível</h5>
+                <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Nível do usuário alterado com sucesso!
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Função para fechar o modal
+    function fechaModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+    }
+
+    // Função para abrir o modal
+    function abreModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.add('show');
+        modal.style.display = 'block';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        let idUsuario;
+
+        // Captura o clique no botão de alterar nível
+        document.querySelectorAll('#alterarNivel').forEach(button => {
+            button.addEventListener('click', function() {
+                idUsuario = this.getAttribute('data-id');
+                if (idUsuario) {
+                    abreModal('confirmAlteraNivel');
+                }
+            });
+        });
+
+        // Confirmação de alteração de nível
+        document.getElementById('confirmAlteraNivelAction').addEventListener('click', async function() {
+            if (idUsuario) {
+                let data = new FormData();
+                data.append('id', idUsuario);
+
+                let req = await fetch('<?= $base; ?>alterar_nivel.php', {
+                    method: 'POST',
+                    body: data
+                });
+
+                let json = await req.json();
+                if (json && json.status === 'success') {
+                    fechaModal('confirmAlteraNivel');
+                    abreModal('confirmAlteraNivelMessage');
+
+                    setTimeout(function() {
+                        fechaModal('confirmAlteraNivelMessage');
+                        location.reload();
+                    }, 2000);
+                } else {
+                    alert('Erro ao alterar o nível do usuário: ' + (json.message || 'Resposta inválida do servidor'));
+                }
+            }
+        });
+    });
+</script>
+
+
 
 </html>
