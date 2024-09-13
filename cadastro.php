@@ -1,13 +1,24 @@
 <?php
 require 'config.php';
 require 'models/Auth.php';
+
+require_once 'dao/UserDAOMySql.php';
+
 $auth = new Auth($pdo, $base);
 $userInfo = $auth->checkToken();
+
+$usuarioDAO = new UserDAOMySql($pdo);
+if ($usuarioDAO) {
+    $usuarios = $usuarioDAO->getAllUsuarios();
+}
+
+
 ?>
 
-<?php require 'partials/header.php' ?>
+
 
 <body>
+    <?php require 'partials/header.php' ?>
     <div class="container mt-5">
         <?php if (!empty($_SESSION['flash'])): ?>
             <div class="flash" style="color: red; font-weight:bold;font-size: 18px; text-align:center"><?php echo $_SESSION['flash']; ?></div>
@@ -47,39 +58,38 @@ $userInfo = $auth->checkToken();
             </div>
             <button type="submit" class="btn btn-primary">Salvar</button>
         </form>
-
         <!-- Tabela de Usuários -->
-        <!-- <div class="mt-5">
-                <h4>Lista de Usuários</h4>
-                <table class="table table-bordered" style="text-align:center">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Nome</th>
-                            <th>Email</th>
-                            <th>Nível de Acesso</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="userTableBody">
-                        <?php if (count($usuarios) > 0) : ?>
-                            <?php foreach ($usuarios as $usuario) : ?>
-                                <tr style="text-align:center;">
-                                    <td><?= $usuario['id'] ?></td>
-                                    <td><?= $usuario['nome'] ?></td>
-                                    <td><?= $usuario['email'] ?>
-                                    <td><?= $usuario['nivel'] ?></td>
-                                    <td>
-                                        <button id="mudancaStatus" data-id=<?= $usuario['id'] ?> class="btn <?= ($usuario['status'] === 'Ativo') ? 'btn-success' : 'btn-danger'; ?> btn-sm" onclick="toggleUserStatus(this, <?= ($usuario['status'] === 'Ativo') ? true : false; ?>)"><?= $usuario['status'] ?></button>
-                                        <button id="resetarSenha" data-id=<?= $usuario['id'] ?> class="btn btn-warning btn-sm" onclick="resetPassword('joao@example.com')">Resetar Senha</button>
-                                        <button id="alterarNivel" data-id=<?= $usuario['id'] ?> class="btn btn-info btn-sm ">Alterar nivel de acesso</button>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div> -->
+        <div class="mt-5">
+            <h4>Lista de Usuários</h4>
+            <table class="table table-bordered" style="text-align:center">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Nível de Acesso</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <?php if (count($usuarios) > 0) : ?>
+                        <?php foreach ($usuarios as $usuario) : ?>
+                            <tr style="text-align:center;">
+                                <td><?= $usuario['id'] ?></td>
+                                <td><?= $usuario['nome'] ?></td>
+                                <td><?= $usuario['email'] ?>
+                                <td><?= $usuario['nivel'] ?></td>
+                                <td>
+                                    <button id="mudancaStatus" data-id=<?= $usuario['id'] ?> class="btn <?= ($usuario['status'] === 'Ativo') ? 'btn-success' : 'btn-danger'; ?> btn-sm" onclick="toggleUserStatus(this, <?= ($usuario['status'] === 'Ativo') ? true : false; ?>)"><?= $usuario['status'] ?></button>
+                                    <button id="resetarSenha" data-id=<?= $usuario['id'] ?> class="btn btn-warning btn-sm" onclick="resetPassword('joao@example.com')">Resetar Senha</button>
+                                    <button id="alterarNivel" data-id=<?= $usuario['id'] ?> class="btn btn-info btn-sm ">Alterar nivel de acesso</button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 </body>
@@ -121,7 +131,7 @@ $userInfo = $auth->checkToken();
 </div>
 <script type="text/javascript">
     function fechaModalAlteraNivel() {
-        $('#confirmAlteraStatus').modal('hide'); // fecha o modal de confirmação
+        $('#confirmAlteraNivel').modal('hide'); // fecha o modal de confirmação
     }
 </script>
 
@@ -134,6 +144,7 @@ $userInfo = $auth->checkToken();
             button.addEventListener('click', function() {
                 idUsuario = this.getAttribute('data-id'); // Captura o ID da ocorrência
                 if (idUsuario) {
+                   
                     $('#confirmAlteraNivel').modal('show'); // Exibe o modal de confirmação
                 }
 
@@ -146,10 +157,12 @@ $userInfo = $auth->checkToken();
                 let data = new FormData();
                 data.append('id', idUsuario);
 
-                let req = await fetch(BASE + '/alterar_nivel', {
+                let req = await fetch(BASE + 'alterar_nivel.php', {
                     method: 'POST',
-                    body: data
+                    body: data,
+                    
                 })
+                
 
                 let json = await req.json()
                     .then(json => {
@@ -169,6 +182,7 @@ $userInfo = $auth->checkToken();
                     })
                     .catch(error => {
                         console.error('Erro ao alterar o nivel do usuário:', error);
+                        console.log(idUsuario);
                         alert('Ocorreu um erro ao tentar ao alterar alterar o nivel do usuário. Por favor, tente novamente.');
                     });
 
@@ -178,7 +192,7 @@ $userInfo = $auth->checkToken();
     });
 </script>
 
-<!-- Modal de exclusao de ativo -->
+<!-- Modal de Mudança de senha -->
 <div class="modal fade" id="confirmReseTSenha" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -241,7 +255,7 @@ $userInfo = $auth->checkToken();
                 let data = new FormData();
                 data.append('id', idUsuario);
 
-                let req = await fetch(BASE + '/resetar/senha', {
+                let req = await fetch(BASE + 'resetar_senha.php', {
                     method: 'POST',
                     body: data
                 })
@@ -337,7 +351,7 @@ $userInfo = $auth->checkToken();
                 let data = new FormData();
                 data.append('id', idUsuario);
 
-                let req = await fetch(BASE + '/alterar/usuario', {
+                let req = await fetch(BASE + 'alterar_status_usuario.php', {
                     method: 'POST',
                     body: data
                 })

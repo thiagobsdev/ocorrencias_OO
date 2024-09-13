@@ -14,6 +14,7 @@ $array = ['error' => ''];
 
 $id = intval(filter_input(INPUT_POST, 'id'));
 
+
 if ($id) {
     $excluir->excluirOcorrencia($id);
     echo json_encode(['status' => 'success']);

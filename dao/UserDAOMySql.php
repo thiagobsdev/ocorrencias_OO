@@ -111,11 +111,123 @@ class UserDAOMySql implements UserDAO
                 $sql = $this->pdo->prepare("SELECT * FROM usuarios WHERE id = :id");
                 $sql->bindValue(':id', $ultimoId);
                 $sql->execute();
-                
+
                 if ($sql->rowCount() > 0) {
                     $data = $sql->fetch(PDO::FETCH_ASSOC);
                     $user = $this->generateUser($data);
                     return $user;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function getAllUsuarios()
+    {
+        $sql = $this->pdo->query("SELECT * FROM usuarios");
+
+        if ($sql->rowCount() > 0) {
+            $data = $sql->fetchAll(PDO::FETCH_ASSOC);
+            return $data;
+        }
+        return false;
+    }
+
+    public function alterarNivelById($id)
+    {
+
+        if ($id) {
+            $sql = $this->pdo->query("SELECT * FROM usuarios WHERE id = $id ");
+
+            if ($sql->rowCount() > 0) {
+                $data = $sql->fetch(PDO::FETCH_ASSOC);
+
+                $usuarioEncontrado = $this->generateUser($data);
+
+                if ($usuarioEncontrado->nivel === "Administrador") {
+                    $sql = $this->pdo->prepare("UPDATE usuarios 
+                                               SET 
+                                               nivel = 'Usuário'        
+                                               WHERE id= :id_usuario");
+
+                    $sql->bindValue(':id_usuario', $usuarioEncontrado->id);
+
+                    $sql->execute();
+                } else {
+                    $sql = $this->pdo->prepare("UPDATE usuarios 
+                                            SET 
+                                            nivel = 'Administrador'
+                                            WHERE id = :id_usuario ");
+
+                    $sql->bindValue(':id_usuario', $usuarioEncontrado->id);
+                    $sql->execute();
+                }
+            }
+        }
+    }
+    public function resetarSenhaDAOByUsuarioID($id)
+    {
+        if ($id) {
+            $sql = $this->pdo->query("SELECT * FROM usuarios WHERE id = $id ");
+
+            if ($sql->rowCount() > 0) {
+                $data = $sql->fetch(PDO::FETCH_ASSOC);
+
+                $usuarioEncontrado = $this->generateUser($data);
+                $novaSenha = '123';
+
+                if (!empty($usuarioEncontrado)) {
+                    $hash = password_hash($novaSenha, PASSWORD_DEFAULT);
+                    $sql = $this->pdo->prepare("UPDATE usuarios 
+                                               SET 
+                                               senha = '$hash'        
+                                               WHERE id= :id_usuario");
+
+                    $sql->bindValue(':id_usuario', $usuarioEncontrado->id);
+
+                    $sql->execute();
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function alterarStatusUsuarioById($id)
+    {
+        if ($id) {
+            $sql = $this->pdo->query("SELECT * FROM usuarios WHERE id = $id ");
+
+            if ($sql->rowCount() > 0) {
+                $data = $sql->fetch(PDO::FETCH_ASSOC);
+
+                $usuarioEncontrado = $this->generateUser($data);
+
+
+                if (!empty($usuarioEncontrado)) {
+
+                    if ($usuarioEncontrado->status === "Ativo") {
+                        $sql = $this->pdo->prepare("UPDATE usuarios 
+                                               SET 
+                                               status = 'Inativo'        
+                                               WHERE id= :id_usuario");
+
+                        $sql->bindValue(':id_usuario', $usuarioEncontrado->id);
+
+                        $sql->execute();
+                    } else {
+                        $sql = $this->pdo->prepare("UPDATE usuarios 
+                                            SET 
+                                            status = 'Ativo'
+                                            WHERE id = :id_usuario ");
+
+                        $sql->bindValue(':id_usuario', $usuarioEncontrado->id);
+                        $sql->execute();
+                    }
+
+                    return true;
                 }
             }
         }

@@ -318,7 +318,7 @@ require 'partials/header.php';
 
             <div class="col-12 d-flex justify-content-center align-items-center mb-5">
                 <div class="col-4 d-flex justify-content-center">
-                    <button class="btn btn-danger w-75 fw-bold" type="submit">Cancelar</button>
+                    <button class="btn btn-danger w-75 fw-bold" type="submit" onclick="redirecionarPagina()" >Cancelar</button>
                 </div>
                 <div class="col-4 d-flex justify-content-center">
                     <button class="btn btn-success w-75 fw-bold" class="botao-enviar" type="submit" onclick="submeterFormulario()">Gravar</button>
@@ -327,6 +327,11 @@ require 'partials/header.php';
         </form>
     </div>
 </main>
+<script>
+     function redirecionarPagina(){
+       window.location.href = BASE+"index.php";
+    }
+</script>
 <script>
     document.getElementById('placa').addEventListener('input', function(e) {
         let input = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
