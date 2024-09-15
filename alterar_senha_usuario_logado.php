@@ -33,18 +33,32 @@ require 'partials/header.php';
             <button type="submit" class="btn btn-primary">Modificar Senha</button>
         </form>
     </div>
-    <?php if (isset($confirmUsuario) && $confirmUsuario === true): ?>
-        <div id="flashMessageSenha"
-            style="text-align: center; color: green; font-size: 34px; font-weight: bold; margin-bottom: 30px; margin-top: 30px"
-            class="flash"><?php echo "Senha alterada com sucesso"; ?></div>
+    <?php if (isset($_SESSION['flash'])  && $_SESSION['flash'] === "Senha alterada com sucesso!"): ?>
+        <!-- Modal -->
+        <div class="container d-flex justify-content-center align-items-center">
+            <div id="successEditModal" class="modal-overlay" style="display:block;">
+                <div class="modal-content">
+                    <h5>Sucesso</h5>
+                    <p>Senha alterada com sucesso!</p>
+                    <button onclick="closeModal()">Fechar</button>
+                </div>
+            </div>
+        </div>
+        <?php unset($_SESSION['flash']); ?>
     <?php endif; ?>
-    <?php if (empty($confirmUsuario) || $confirmUsuario === false): ?>
-        <div id="flashMessageSenha"
-            style="text-align: center; color: red; font-size: 34px; font-weight: bold; margin-bottom: 30px; margin-top: 30px"
-            class="flash"><?php echo "Erro ao alterar a senha. Verifique os campos digitados!"; ?></div>
+    <?php if (isset($_SESSION['flash'])  && $_SESSION['flash'] === "Ocorreu um erro ao tentar alterar a senha. Verifique os campos digitados!"): ?>
+        <!-- Modal -->
+        <div class="container d-flex justify-content-center align-items-center">
+            <div id="successEditModal" class="modal-overlay" style="display:block;">
+                <div class="modal-content">
+                    <h5>ERRO!</h5>
+                    <p>Erro ao alterar a senha! verifique os campos digitados!</p>
+                    <button onclick="closeModal()">Fechar</button>
+                </div>
+            </div>
+        </div>
+        <?php unset($_SESSION['flash']); ?>
     <?php endif; ?>
-
-
 </main>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -73,6 +87,12 @@ require 'partials/header.php';
             errorMessage.style.display = 'none'; // Oculta a mensagem de erro se as senhas forem iguais
         }
     });
+</script>
+ <script>
+        // Função para fechar o modal
+        function closeModal() {
+            document.getElementById('successEditModal').style.display = 'none';
+        }
 </script>
 </body>
 

@@ -399,7 +399,7 @@ require 'partials/header.php';
         "Invasão do terminal": ["Gate", "Cerca", "Prédio", "Pátio"],
         "Avarias / Perdas dos ativos do Terminal": ["Dano", "Extravio", "Colisão"],
         "Avarias / Perdas dos ativos de terceiros": ["Dano", "Extravio", "Colisão"],
-        "Outros": [""]
+        "Outros": ["Outros"]
     };
 
     const categorySelectEdit = document.getElementById('tipo_natureza_edit');

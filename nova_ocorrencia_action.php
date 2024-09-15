@@ -74,7 +74,12 @@ if (
         $fotosDAO = new FotoDAOMySql($pdo);
         $fotosDAO->salvarFotos($arquivosFotos, $data_ocorrencia, $id_ocorrencia, $id_usuario);
     }
+    if ($id_ocorrencia) {
+        $_SESSION['flash'] = "ocorrência incluída com sucesso!";
+        header("Location: " . $base . "nova_ocorrencia.php");
+        exit;
+    }
 }
-
-header("Location: " . $base . "index.php");
+$_SESSION['flash'] = "Erro ao cadastrar a ocorrência!";
+header("Location: " . $base . "nova_ocorrencia.php");
 exit;

@@ -34,9 +34,6 @@ $envolvidos = isset($_POST['envolvidos']) ? $_POST['envolvidos'] : null;
 $ativosLista = isset($_POST['ativos']) ? $_POST['ativos'] : null;
 $arquivosFotos = isset($_FILES['fotos']) ? $_FILES['fotos'] : null;
 
-// print_r($arquivosFotos );
-// exit;
-
 if (
     $id_ocorrencia &&
     $equipe &&
@@ -81,6 +78,12 @@ if (
         $fotosDAO = new FotoDAOMySql($pdo);
         $fotosDAO->salvarFotos($arquivosFotos, $data_ocorrencia, $id_ocorrencia, $id_usuario);
     }
+    if ($ocorrenciaAtualizada) {
+        $_SESSION['flash'] = "ocorrência editada com sucesso!";
+        header("Location: " . $base . "index.php");
+        exit;
+    }
 }
+$_SESSION['flash'] = "erro ao editar a ocorrência!";
 header("Location: " . $base . "index.php");
 exit;

@@ -14,6 +14,8 @@ $userInfo = $auth->checkToken();
 $idOcorrencia = abs(intval(filter_input(INPUT_POST, 'id_ocorrencia')));
 $ocorrencia = $ocorrenciaDAO->getOcorrenciaByIdFilter($idOcorrencia);
 
+
+
 require 'partials/header.php';
 
 ?>
@@ -34,7 +36,7 @@ require 'partials/header.php';
         <div class="row">
             <div class="col">
                 <!-- Card Ocorrências -->
-                <?php if (!empty($ocorrencias)) : ?>
+                <?php if (!empty($ocorrencia)) : ?>
                     <?php require 'partials/card_ocorrencia_by_FilterID.php' ?>
                 <?php else: ?>
                     Nenhuma ocorrência encontrada!

@@ -21,12 +21,10 @@ if ($nome && $email && $senha && $nivel && $status) {
     $novoUsuario->senha = $senha;
     $novoUsuario->nivel = $nivel;
     $novoUsuario->status = $status;
-
     $userDAO = new UserDAOMySql($pdo);
-
-
     $user = $userDAO->cadastrarUsuario($novoUsuario);
     if ($user) {
+        $_SESSION['flash'] = "Usuário cadastrado com sucesso!";
         header("Location: " . $base . "cadastro.php");
         exit;
     }

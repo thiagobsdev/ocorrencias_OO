@@ -8,11 +8,14 @@ $auth = new Auth($pdo, $base);
 $userInfo = $auth->checkToken();
 
 require 'partials/header.php';
+
 ?>
 
-<main style="background-color: rgba(211, 204, 204, 1)">
-    <div class="container" style="background-color:  white">
 
+
+<main style="background-color: rgba(211, 204, 204, 1)">
+
+    <div class="container" style="background-color:  white; ">
         <h1 class="" style="text-align:center;margin-bottom: 30px;padding-top:10px">Registros de ocorrências</h1>
         <?php if (!empty($flash) && $flash == 'Ocorrencia cadastrada com sucesso!'): ?>
             <div id="flashMessage"
@@ -72,11 +75,38 @@ require 'partials/header.php';
                     </div>
                 </div>
             </div>
+            <?php if (isset($_SESSION['flash'])  && $_SESSION['flash'] === "ocorrência incluída com sucesso!"): ?>
+                <!-- Modal -->
+                <div class="container d-flex justify-content-center align-items-center">
+                    <div id="successModal" class="modal-overlay" style="display:block;">
+                        <div class="modal-content">
+                            <h5>Sucesso</h5>
+                            <p>A ocorrência foi registrada com sucesso!</p>
+                            <button onclick="closeModalSucess()">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <?php unset($_SESSION['flash']); ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['flash'])  && $_SESSION['flash'] === "Erro ao cadastrar a ocorrência!"): ?>
+                <!-- Modal -->
+                <div class="container d-flex justify-content-center align-items-center">
+                    <div id="erroModal" class="modal-overlay" style="display:block;">
+                        <div class="modal-content">
+                            <h5>Erro</h5>
+                            <p>Ocorreu um erro ao cadastradar a ocorrência! verifique os campos e tente novamente!</p>
+                            <button onclick="closeModalErro()">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <?php unset($_SESSION['flash']); ?>
+            <?php endif; ?>
             <div class="col-md-12">
                 <label for="validationServer01" class="form-label">Título</label>
                 <input type="text" class="form-control  text-break" id="validationServer01" value="" required name="titulo">
             </div>
-
             <div class="col-md-6">
                 <label for="validationServer04" class="form-label">Informe a Área</label>
                 <select class="form-select" aria-label="Default select example" name="area" id="areaSelect">
@@ -101,6 +131,7 @@ require 'partials/header.php';
                     <option value="" selected>Selecione a natureza da ocorrência</option>
                 </select>
             </div>
+
             <div class="container mt-5">
                 <h2>Envolvidos</h2>
 
@@ -318,7 +349,7 @@ require 'partials/header.php';
 
             <div class="col-12 d-flex justify-content-center align-items-center mb-5">
                 <div class="col-4 d-flex justify-content-center">
-                    <button class="btn btn-danger w-75 fw-bold" type="submit" onclick="redirecionarPagina()" >Cancelar</button>
+                    <button class="btn btn-danger w-75 fw-bold" type="submit" onclick="redirecionarPagina()">Cancelar</button>
                 </div>
                 <div class="col-4 d-flex justify-content-center">
                     <button class="btn btn-success w-75 fw-bold" class="botao-enviar" type="submit" onclick="submeterFormulario()">Gravar</button>
@@ -326,10 +357,26 @@ require 'partials/header.php';
             </div>
         </form>
     </div>
+
 </main>
+
 <script>
-     function redirecionarPagina(){
-       window.location.href = BASE+"index.php";
+    // Função para fechar o modal
+    function closeModalSucess() {
+        document.getElementById('successModal').style.display = 'none';
+    }
+</script>
+<script>
+    // Função para fechar o modal
+    function closeModalErro() {
+        document.getElementById('erroModal').style.display = 'none';
+    }
+</script>
+
+
+<script>
+    function redirecionarPagina() {
+        window.location.href = BASE + "index.php";
     }
 </script>
 <script>
@@ -452,7 +499,7 @@ require 'partials/header.php';
         "Invasão do terminal": ["Gate", "Cerca", "Prédio", "Pátio"],
         "Avarias / Perdas dos ativos do Terminal": ["Dano", "Extravio", "Colisão"],
         "Avarias / Perdas dos ativos de terceiros": ["Dano", "Extravio", "Colisão"],
-        "Outros": [""]
+        "Outros": ["Outros"]
     };
 
     const categorySelect = document.getElementById('tipo_natureza');
@@ -534,7 +581,6 @@ require 'partials/header.php';
 
 <script>
     function submeterFormulario() {
-
 
         const formOriginal = document.querySelector('formOriginal');
 

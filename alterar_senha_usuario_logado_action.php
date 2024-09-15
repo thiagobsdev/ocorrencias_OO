@@ -16,14 +16,16 @@ $novaSenha = filter_input(INPUT_POST, 'novaSenha');
 $confirmaSenha = filter_input(INPUT_POST, 'confirmNovaSenha');
 $id_usuario = $userInfo->id;
 
-// print_r($senhaAtual);
-// exit;
-
 if ($senhaAtual && $novaSenha &&  $confirmaSenha && $id_usuario) {
     if ($novaSenha ===  $confirmaSenha) {
         $confirmUsuario = $alteraSenhaUsuarioLogado->alteraSenhaUsuarioLogado($senhaAtual, $novaSenha, $id_usuario);
-    } else {
-        $_SESSION['flash'] = "Ocorreu um erro ao tentar alterar a senha. Verifique os campos digitados!";
-        $this->redirect('/alterar_senha');
+        if ($confirmUsuario) {
+            $_SESSION['flash'] = "Senha alterada com sucesso!";
+            header("Location: " . $base . "alterar_senha_usuario_logado.php");
+            exit;
+        }
     }
 }
+$_SESSION['flash'] = "Ocorreu um erro ao tentar alterar a senha. Verifique os campos digitados!";
+header("Location: " . $base . "alterar_senha_usuario_logado.php");
+exit;

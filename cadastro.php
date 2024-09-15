@@ -18,9 +18,31 @@ require 'partials/header.php';
 <body>
 
     <div class="container mt-5">
-        <?php if (!empty($_SESSION['flash'])): ?>
-            <div class="flash" style="color: red; font-weight:bold;font-size: 18px; text-align:center"><?php echo $_SESSION['flash']; ?></div>
-            <?php $_SESSION['flash'] = '' ?>
+        <?php if (isset($_SESSION['flash'])  && $_SESSION['flash'] === "Usuário cadastrado com sucesso!"): ?>
+            <!-- Modal -->
+            <div class="container d-flex justify-content-center align-items-center">
+                <div id="successEditModal" class="modal-overlay" style="display:block;">
+                    <div class="modal-content">
+                        <h5>Sucesso</h5>
+                        <p>Usuário cadastrado com sucesso!</p>
+                        <button onclick="closeModal()">Fechar</button>
+                    </div>
+                </div>
+            </div>
+            <?php unset($_SESSION['flash']); ?>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['flash'])  && $_SESSION['flash'] === "Email já cadastrado ou campos incompletos! tente novamente!"): ?>
+            <!-- Modal -->
+            <div class="container d-flex justify-content-center align-items-center">
+                <div id="successEditModal" class="modal-overlay" style="display:block;">
+                    <div class="modal-content">
+                        <h5>ERRO!</h5>
+                        <p>Erro ao alterar a senha! verifique os campos digitados!</p>
+                        <button onclick="closeModal()">Fechar</button>
+                    </div>
+                </div>
+            </div>
+            <?php unset($_SESSION['flash']); ?>
         <?php endif; ?>
         <h2>Gerenciamento de Usuários</h2>
 
@@ -92,7 +114,12 @@ require 'partials/header.php';
     </div>
 
 </body>
-
+<script>
+    // Função para fechar o modal
+    function closeModal() {
+        document.getElementById('successEditModal').style.display = 'none';
+    }
+</script>
 <!-- Modal de alteração de nível -->
 <div class="modal fade" id="confirmMudancaStatus" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
