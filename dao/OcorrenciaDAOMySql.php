@@ -4,6 +4,7 @@ require_once 'models/Ocorrencia.php';
 require_once 'dao/UserDAOMySql.php';
 require_once 'dao/AtivoDAOMySql.php';
 require_once 'dao/EnvolvidoDAOMySql.php';
+require_once 'dao/ComentarioDAOMySql.php';
 require_once 'dao/FotoDAOMySql.php';
 
 
@@ -220,6 +221,14 @@ class OcorrenciaDAOMySql implements OcorrenciaDAO
                 if ($sql->rowCount() > 0) {
                     $data = $sql->fetchAll(PDO::FETCH_ASSOC);
                     $novaOcorrencia->fotosOcorrencias = $data;
+                }
+
+                $comentariosDAO = new ComentarioDAOMySql($this->pdo);
+                $listaDeComentariosData = $comentariosDAO->listarComentariosByIdOcorrencia($novaOcorrencia->id);
+                $novaOcorrencia->listaComentarios = [];
+                if( !empty($listaDeComentariosData)) {
+                    
+                     $novaOcorrencia->listaComentarios = $listaDeComentariosData;
                 }
 
                 $listaOcorrencias[] = $novaOcorrencia;
@@ -462,6 +471,12 @@ class OcorrenciaDAOMySql implements OcorrenciaDAO
                     $data = $sql->fetchAll(PDO::FETCH_ASSOC);
                     $novaOcorrencia->fotosOcorrencias = $data;
                 }
+
+                // $comentariosDAO = new ComentarioDAOMySql($this->pdo);
+                // $listaDeComentarios = $comentariosDAO->listarComentariosByIdOcorrencia($novaOcorrencia->id);
+
+                // print_r($listaDeComentarios);
+                // exit;
 
                 $listaOcorrencias[] = $novaOcorrencia;
             }

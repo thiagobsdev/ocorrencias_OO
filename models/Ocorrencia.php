@@ -21,7 +21,7 @@ class Ocorrencia  {
      public $envolvidosLista;
      public $ativosLista;
      public $fotosOcorrencias;
-     public $comentarios;
+     public $listaComentarios;
 
 }
 

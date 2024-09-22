@@ -115,6 +115,7 @@
         <?php else : ?>
             <p>A lista de Fotos está vazia.</p>
         <?php endif; ?>
+        <?php require 'card_comentarios.php' ?>
     </div>
 </div>
 
